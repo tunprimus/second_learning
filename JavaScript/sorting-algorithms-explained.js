@@ -5,6 +5,7 @@
 const ARRAY_TO_SORT_1 = [8, 3, 5, 1, 4, 2, 1, 4, 1, 2, 7, 5, 2];
 const ARRAY_TO_SORT_2 = [16, 6, 10, 2, 8, 4, 2, 8, 2, 4, 14, 10, 4];
 const ARRAY_TO_SORT_3 = [6, 1, 3, -1, 2, 0, -1, 2, -1, 0, 5, 3, 0];
+const ARRAY_TO_SORT_4 = [1, 4, 7, 45, 7, 43, 44, 25, 6, 4, 6, 9];
 
 /**
  * @description
@@ -243,3 +244,37 @@ function selectionSort(arr) {
 	return arr;
 }
 console.log(selectionSort(ARRAY_TO_SORT_3));
+
+
+/**
+ * @description
+ * With a worst-case complexity of O(n^2), bubble sort is very slow compared to other sorting algorithms like quicksort. The upside is that it is one of the easiest sorting algorithms to understand and code from scratch.
+ * 
+ * Properties
+		- Space complexity: O(1)
+		- Best case performance: O(n)
+		- Average case performance: O(n*n)
+		- Worst case performance: O(n*n)
+		- Stable: Yes
+ * 
+ * @param {number[]} arr Array of numbers
+ * @returns {number[]} Array of numbers
+ */
+function bubbleSort(arr) {
+	let sorted = false;
+
+	while (!sorted) {
+		sorted = true;
+		for (let i = 0; i < arr.length; i++) {
+			if (arr[i] < arr[i - 1]) {
+				let temp = arr[i];
+				arr[i] = arr[i - 1];
+				arr[i - 1] = temp;
+				sorted = false;
+			}
+		}
+	}
+
+	return arr;
+}
+console.log(bubbleSort(ARRAY_TO_SORT_4));

@@ -6,6 +6,8 @@ const ARRAY_TO_SORT_1 = [8, 3, 5, 1, 4, 2, 1, 4, 1, 2, 7, 5, 2];
 const ARRAY_TO_SORT_2 = [16, 6, 10, 2, 8, 4, 2, 8, 2, 4, 14, 10, 4];
 const ARRAY_TO_SORT_3 = [6, 1, 3, -1, 2, 0, -1, 2, -1, 0, 5, 3, 0];
 const ARRAY_TO_SORT_4 = [1, 4, 7, 45, 7, 43, 44, 25, 6, 4, 6, 9];
+const ARRAY_TO_SORT_5 = [6, 2, 5, 3, 8, 7, 1, 4];
+
 
 /**
  * @description
@@ -278,3 +280,75 @@ function bubbleSort(arr) {
 	return arr;
 }
 console.log(bubbleSort(ARRAY_TO_SORT_4));
+
+
+function partitionArray(arr, start, end) {
+	let pivot = end;
+	// Set i to start - 1 so that it can access the first index in the event that the value at arr[0] is greater than arr[pivot]
+  // Succeeding comments will expound upon the above comment
+	let i = start - 1;
+	let j = start;
+
+	 // Increment j up to the index preceding the pivot
+	while (j < pivot) {
+		// If the value is greater than the pivot increment j
+		if (arr[j] > arr[pivot]) {
+			j++;
+		} else { // When the value at arr[j] is less than the pivot:
+			// increment i (arr[i] will be a value greater than arr[pivot]) and swap the value at arr[i] and arr[j]
+			i++;
+			swap(arr, j, i);
+			j++;
+		}
+	}
+
+	// The value at arr[i + 1] will be greater than the value of arr[pivot]
+	swap(arr, i + 1, pivot);
+
+	// You return i + 1, as the values to the left of it are less than arr[i+1], and values to the right are greater than arr[i + 1]
+  // As such, when the recursive quicksorts are called, the new sub arrays will not include this the previously used pivot value
+	return i + 1;
+}
+
+/**
+ * 
+ * @description
+ * Quick sort is an efficient divide and conquer sorting algorithm. Average case time complexity of Quick Sort is O(nlog(n)) with worst case time complexity being O(n^2) depending on the selection of the pivot element, which divides the current array into two sub arrays.
+
+For instance, the time complexity of Quick Sort is approximately O(nlog(n)) when the selection of pivot divides original array into two nearly equal sized sub arrays.
+
+On the other hand, if the algorithm, which selects of pivot element of the input arrays, consistently outputs 2 sub arrays with a large difference in terms of array sizes, quick sort algorithm can achieve the worst case time complexity of O(n^2).
+
+The steps involved in Quick Sort are:
+
+Choose an element to serve as a pivot, in this case, the last element of the array is the pivot.
+Partitioning: Sort the array in such a manner that all elements less than the pivot are to the left, and all elements greater than the pivot are to the right.
+Call Quicksort recursively, taking into account the previous pivot to properly subdivide the left and right arrays. (A more detailed explanation can be found in the comments below)
+ * 
+ * Properties
+ * Best, average, worst, memory: n log(n)n log(n)n 2log(n). It's not a stable algorithm, and quicksort is usually done in-place with O(log(n)) stack space.
+
+The space complexity of quick sort is O(n). This is an improvement over other divide and conquer sorting algorithms, which take O(n log(n)) space.
+ * 
+ * @param {number[]} arr Array of numbers
+ * @param {number} start Index
+ * @param {number} end Index
+ * @returns {number[]} Array of numbers
+ */
+function quickSort(arr, start = 0, end = arr.length - 1) {
+	if (start < end) {
+		let pivot = partitionArray(arr, start, end);
+
+		quickSort(arr, start, pivot - 1);
+		quickSort(arr, pivot + 1, end);
+	}
+
+	return arr;
+}
+console.log('\n======= Quick Sort Start =======\n');
+console.log(quickSort(ARRAY_TO_SORT_1));
+console.log(quickSort(ARRAY_TO_SORT_2));
+console.log(quickSort(ARRAY_TO_SORT_3));
+console.log(quickSort(ARRAY_TO_SORT_4));
+console.log(quickSort(ARRAY_TO_SORT_5));
+console.log('\n======= End Quick Sort =======\n');

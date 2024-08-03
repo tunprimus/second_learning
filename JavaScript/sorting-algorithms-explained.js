@@ -1,7 +1,11 @@
 //@ts-check
 
+'use strict';
+
+const ARRAY_TO_SORT = [8, 3, 5, 1, 4, 2, 1, 4, 1, 2, 7, 5, 2];
+
 /**
- * @example
+ * @description
  * Say you have a list of integers from 0 to 5:
 
 	input = [2, 5, 3, 1, 4, 2]
@@ -55,7 +59,7 @@
 
 	output = [1, 2, 2, 3, 4, 5]
 
-	@example
+	@description
 	Properties
 		- Space complexity: O(k)
 		- Best case performance: O(n+k)
@@ -93,8 +97,92 @@ function countingSort() {
 	}
 
 	// Output sorted array
-	for(i = 0; i < output.length; i++) {
+	console.log(output);
+
+	/** for(i = 0; i < output.length; i++) {
 		console.log(output[i]);
-	}
+	} */
 }
 countingSort()
+
+
+/**
+ * @description
+ * Insertion sort is a simple sorting algorithm for a small number of elements.
+ * In Insertion sort, you compare the key element with the previous elements. If the previous elements are greater than the key element, then you move the previous element to the next position.
+ * Start from index 1 to size of the input array. [ 8 3 5 1 4 2 ]
+ * 
+ * Step 1 :
+ * key = 3 //starting from 1st index.
+
+      Here `key` will be compared with the previous elements.
+
+      In this case, `key` is compared with 8. since 8 > 3, move the element 8
+      to the next position and insert `key` to the previous position.
+
+      Result: [ 3 8 5 1 4 2 ]
+ * 
+		Step 2 :
+ *	key = 5 //2nd index
+
+      8 > 5 //move 8 to 2nd index and insert 5 to the 1st index.
+
+      Result: [ 3 5 8 1 4 2 ]
+ *
+ * Step 3 :
+ *   key = 1 //3rd index
+
+      8 > 1     => [ 3 5 1 8 4 2 ]  
+
+      5 > 1     => [ 3 1 5 8 4 2 ]
+
+      3 > 1     => [ 1 3 5 8 4 2 ]
+
+      Result: [ 1 3 5 8 4 2 ]
+ * 
+ * Step 4 :
+ *  key = 4 //4th index
+
+      8 > 4   => [ 1 3 5 4 8 2 ]
+
+      5 > 4   => [ 1 3 4 5 8 2 ]
+
+      3 > 4   ≠>  stop
+
+      Result: [ 1 3 4 5 8 2 ]
+ * 
+ * Step 5 :
+ *  key = 2 //5th index
+
+      8 > 2   => [ 1 3 4 5 2 8 ]
+
+      5 > 2   => [ 1 3 4 2 5 8 ]
+
+      4 > 2   => [ 1 3 2 4 5 8 ]
+
+      3 > 2   => [ 1 2 3 4 5 8 ]
+
+      1 > 2   ≠> stop
+
+      Result: [1 2 3 4 5 8]
+ * 
+ * @param {number[]} arr Array of numbers
+ * @returns {number[]} Array of numbers
+ */
+function insertionSort(arr) {
+	let len = arr.length;
+	let i = 1;
+
+	while (i < len) {
+		let buffer = arr[i];
+		let j = i - 1;
+		while (j >= 0 && arr[j] > buffer) {
+			arr[j + 1] = arr[j];
+			j--;
+		}
+		arr[j + 1] = buffer;
+		i++;
+	}
+	return arr;
+}
+console.log(insertionSort(ARRAY_TO_SORT));

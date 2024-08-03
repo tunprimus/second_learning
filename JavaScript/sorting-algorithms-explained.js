@@ -77,6 +77,7 @@ const ARRAY_TO_SORT_5 = [6, 2, 5, 3, 8, 7, 1, 4];
 		- Worst case performance: O(n+k)
 		- Stable: Yes (k is the range of the elements in the array)
 	@param {number[]} [arr=[]] An optional array of numbers
+	@returns {number[]} Array of sorted numbers
  */
 function countingSort(arr = []) {
 	let numbers;
@@ -181,7 +182,7 @@ console.log(countingSort(ARRAY_TO_SORT_1));
       Result: [1 2 3 4 5 8]
  * 
  * @param {number[]} arr Array of numbers
- * @returns {number[]} Array of numbers
+ * @returns {number[]} Array of sorted numbers
  */
 function insertionSort(arr) {
 	let len = arr.length;
@@ -232,7 +233,7 @@ Selection sort always takes the same number of key comparisons — N(N − 1)/2.
 		- Sorting in Place:  Yes
 		- Stable:  No
  * @param {number[]} arr Array of number
- * @returns {number[]} Array of number
+ * @returns {number[]} Array of sorted numbers
  */
 function selectionSort(arr) {
 	let len = arr.length;
@@ -265,7 +266,7 @@ console.log(selectionSort(ARRAY_TO_SORT_3));
 		- Stable: Yes
  * 
  * @param {number[]} arr Array of numbers
- * @returns {number[]} Array of numbers
+ * @returns {number[]} Array of sorted numbers
  */
 function bubbleSort(arr) {
 	let sorted = false;
@@ -338,7 +339,7 @@ The space complexity of quick sort is O(n). This is an improvement over other di
  * @param {number[]} arr Array of numbers
  * @param {number} start Index
  * @param {number} end Index
- * @returns {number[]} Array of numbers
+ * @returns {number[]} Array of sorted numbers
  */
 function quickSort(arr, start = 0, end = arr.length - 1) {
 	if (start < end) {
@@ -361,9 +362,35 @@ console.log('\n======= End Quick Sort =======\n');
 
 /**
  * 
+ * @param {number[]} arr Array of numbers
+ * @returns {number[]} Array of sorted numbers
+ */
+function quickSortES6(arr) {
+	if (arr.length < 2) {
+		return arr;
+	}
+
+	let pivot = arr[0];
+	let leftArr = [];
+	let rightArr = [];
+
+	for (let i = 1; i < arr.length; i++) {
+		if (arr[i] < pivot) {
+			leftArr.push(arr[i]);
+		} else {
+			rightArr.push(arr[i]);
+		}
+	}
+
+	return [...quickSort(leftArr), pivot, ...quickSort(rightArr)];
+}
+console.log(quickSortES6(ARRAY_TO_SORT_2));
+
+/**
+ * 
  * @param {number[]} arr1 Array of numbers
  * @param {number[]} arr2 Array of numbers
- * @returns {number[]} [arr=[]] An optional array of numbers
+ * @returns {number[]} [arr=[]] An optional array of sorted numbers
  */
 function merge(arr1, arr2) {
 	let result = [];
@@ -400,7 +427,7 @@ Merge the sorted halves.
  * 
  * 
  * @param {number[]} arr Array of numbers
- * @returns {number[]} Array of numbers
+ * @returns {number[]} Array of sorted numbers
  */
 function mergeSort(arr) {
 	if (arr.length < 2) {

@@ -2,7 +2,9 @@
 
 'use strict';
 
-const ARRAY_TO_SORT = [8, 3, 5, 1, 4, 2, 1, 4, 1, 2, 7, 5, 2];
+const ARRAY_TO_SORT_1 = [8, 3, 5, 1, 4, 2, 1, 4, 1, 2, 7, 5, 2];
+const ARRAY_TO_SORT_2 = [16, 6, 10, 2, 8, 4, 2, 8, 2, 4, 14, 10, 4];
+const ARRAY_TO_SORT_3 = [6, 1, 3, -1, 2, 0, -1, 2, -1, 0, 5, 3, 0];
 
 /**
  * @description
@@ -107,7 +109,7 @@ function countingSort(arr = []) {
 	return output;
 }
 console.log(countingSort());
-console.log(countingSort(ARRAY_TO_SORT));
+console.log(countingSort(ARRAY_TO_SORT_1));
 
 
 /**
@@ -189,4 +191,55 @@ function insertionSort(arr) {
 	}
 	return arr;
 }
-console.log(insertionSort(ARRAY_TO_SORT));
+console.log(insertionSort(ARRAY_TO_SORT_2));
+
+/**
+ * 
+ * @param {number[]} arr Array of numbers
+ * @param {number} x Index
+ * @param {number} y Index
+ */
+function swap(arr, x, y) {
+	let temp = arr[x];
+	arr[x] = arr[y];
+	arr[y] = temp;
+}
+
+/**
+ * @description
+ * Here's how it works:
+
+Find the smallest element in the array and swap it with the first element.
+Find the second smallest element and swap with with the second element in the array.
+Find the third smallest element and swap wit with the third element in the array.
+Repeat the process of finding the next smallest element and swapping it into the correct position until the entire array is sorted.
+ * But, how would you write the code for finding the index of the second smallest value in an array?
+
+An easy way is to notice that the smallest value has already been swapped into index 0, so the problem reduces to finding the smallest element in the array starting at index 1.
+
+Selection sort always takes the same number of key comparisons — N(N − 1)/2.
+ * Properties
+		- Space Complexity:  O(n)
+		- Time Complexity:  O(n2)
+		- Sorting in Place:  Yes
+		- Stable:  No
+ * @param {number[]} arr Array of number
+ * @returns {number[]} Array of number
+ */
+function selectionSort(arr) {
+	let len = arr.length;
+	for (let i = 0; i < len - 1; i++) {
+		let jMin = i;
+		for (let j = i + 1; j < len; j++) {
+			if (arr[j] < arr[jMin]) {
+				jMin = j;
+			}
+		}
+		if (jMin !== i) {
+			swap(arr, i, jMin);
+		}
+	}
+
+	return arr;
+}
+console.log(selectionSort(ARRAY_TO_SORT_3));

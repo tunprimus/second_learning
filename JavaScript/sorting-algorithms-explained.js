@@ -66,6 +66,7 @@ const ARRAY_TO_SORT = [8, 3, 5, 1, 4, 2, 1, 4, 1, 2, 7, 5, 2];
 		- Average case performance: O(n+k)
 		- Worst case performance: O(n+k)
 		- Stable: Yes (k is the range of the elements in the array)
+	@param {number[]} [arr=[]] An optional array of numbers
  */
 function countingSort(arr = []) {
 	let numbers;
@@ -103,14 +104,10 @@ function countingSort(arr = []) {
 	}
 
 	// Output sorted array
-	console.log(output);
-
-	/** for(i = 0; i < output.length; i++) {
-		console.log(output[i]);
-	} */
+	return output;
 }
-countingSort()
-countingSort(ARRAY_TO_SORT)
+console.log(countingSort());
+console.log(countingSort(ARRAY_TO_SORT));
 
 
 /**

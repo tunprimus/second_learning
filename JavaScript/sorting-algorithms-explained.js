@@ -2,6 +2,11 @@
 
 'use strict';
 
+/**
+ * @tutorial Sorting Algorithms Explained with Examples in JavaScript, Python, Java, and C++
+ * @link https://www.freecodecamp.org/news/sorting-algorithms-explained-with-examples-in-python-java-and-c/
+ */
+
 const ARRAY_TO_SORT_1 = [8, 3, 5, 1, 4, 2, 1, 4, 1, 2, 7, 5, 2];
 const ARRAY_TO_SORT_2 = [16, 6, 10, 2, 8, 4, 2, 8, 2, 4, 14, 10, 4];
 const ARRAY_TO_SORT_3 = [6, 1, 3, -1, 2, 0, -1, 2, -1, 0, 5, 3, 0];
@@ -352,3 +357,61 @@ console.log(quickSort(ARRAY_TO_SORT_3));
 console.log(quickSort(ARRAY_TO_SORT_4));
 console.log(quickSort(ARRAY_TO_SORT_5));
 console.log('\n======= End Quick Sort =======\n');
+
+
+/**
+ * 
+ * @param {number[]} arr1 Array of numbers
+ * @param {number[]} arr2 Array of numbers
+ * @returns {number[]} [arr=[]] An optional array of numbers
+ */
+function merge(arr1, arr2) {
+	let result = [];
+	while (arr1.length > 0 && arr2.length > 0) {
+		result.push(arr1[0] < arr2[0] ? arr1.shift() : arr2.shift());
+	}
+	// @ts-ignore
+	return result.concat(arr1.length ? arr1 : arr2);
+}
+
+/**
+ * @description
+ * Merge Sort is a Divide and Conquer algorithm. It divides input array in two halves, calls itself for the two halves and then merges the two sorted halves. The major portion of the algorithm is given two sorted arrays, and we have to merge them into a single sorted array. The whole process of sorting an array of N integers can be summarized into three steps-
+
+Divide the array into two halves.
+Sort the left half and the right half using the same recurring algorithm.
+Merge the sorted halves.
+ * 
+ * The biggest advantage of using Merge sort is that the time complexity is only n*log(n) to sort an entire Array. It is a lot better than n^2 running time of bubble sort or insertion sort.
+ * -Initially we have an array of 6 unsorted integers Arr(5, 8, 3, 9, 1, 2)
+	- We split the array into two halves Arr1 = (5, 8, 3) and Arr2 = (9, 1, 2).
+	- Again, we divide them into two halves: Arr3 = (5, 8) and Arr4 = (3) and Arr5 = (9, 1) and Arr6 = (2)
+	- Again, we divide them into two halves: Arr7 = (5), Arr8 = (8), Arr9 = (9), Arr10 = (1) and Arr6 = (2)
+	- We will now compare the elements in these sub arrays in order to merge them.
+ * 
+ * Properties:
+		- Space Complexity: O(n)
+		- Time Complexity: O(n*log(n)). The time complexity for the Merge Sort might not be obvious from the first glance. The log(n) factor that comes in is because of the recurrence relation we have mentioned before.
+		- Sorting In Place: No in a typical implementation
+		- Stable: Yes
+		- Parallelisable :yes (Several parallel variants are discussed in the third edition of Cormen, Leiserson, Rivest, and Stein's Introduction to Algorithms.)
+ * 
+ * 
+ * 
+ * 
+ * @param {number[]} arr Array of numbers
+ * @returns {number[]} Array of numbers
+ */
+function mergeSort(arr) {
+	if (arr.length < 2) {
+		return arr;
+	}
+
+	let mid = Math.floor(arr.length / 2);
+	let subLeft = mergeSort(arr.slice(0, mid));
+	let subRight = mergeSort(arr.slice(mid));
+
+	return merge(subLeft, subRight);
+}
+console.log(mergeSort(ARRAY_TO_SORT_5));
+console.log(mergeSort(ARRAY_TO_SORT_2));

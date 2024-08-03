@@ -67,8 +67,14 @@ const ARRAY_TO_SORT = [8, 3, 5, 1, 4, 2, 1, 4, 1, 2, 7, 5, 2];
 		- Worst case performance: O(n+k)
 		- Stable: Yes (k is the range of the elements in the array)
  */
-function countingSort() {
-	let numbers = [1, 4, 1, 2, 7, 5, 2];
+function countingSort(arr = []) {
+	let numbers;
+	if (arr.length === 0) {
+		numbers = [1, 4, 1, 2, 7, 5, 2];
+	} else {
+		numbers = arr;
+	}
+	
 	let count = [];
 	let output = [];
 	let i;
@@ -104,6 +110,7 @@ function countingSort() {
 	} */
 }
 countingSort()
+countingSort(ARRAY_TO_SORT)
 
 
 /**

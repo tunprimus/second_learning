@@ -1,9 +1,11 @@
 import pandas as pd
 from importlib import resources
 from treelib import Tree
+from os.path import realpath as realpath
 
 pd.set_option("mode.copy_on_write", True)
 
+path_to_data_folder = realpath("./data/")
 
 def get_data(filepath):
     """Get book data from the csv file"""
@@ -48,7 +50,7 @@ def add_new_book(data, author_name, book_title, publisher_name):
     """Adds a new book to the system"""
 
     # Does the book exist?
-    first_name, _, last_name = author_name.partition("")
+    first_name, _, last_name = author_name.partition(" ")
     if any(
         (data.first_name == first_name)
         & (data.last_name == last_name)
@@ -58,15 +60,20 @@ def add_new_book(data, author_name, book_title, publisher_name):
         return data
 
     # Add the new book
-    return data.append(
-        {
-            "first_name": first_name,
-            "last_name": last_name,
-            "title": book_title,
-            "publisher": publisher_name,
-        },
-        ignore_index=True,
-    )
+    try:
+        return data.append(
+            {
+                "first_name": first_name,
+                "last_name": last_name,
+                "title": book_title,
+                "publisher": publisher_name,
+            },
+            ignore_index=True,
+        )
+    except AttributeError:
+        new_data = {"first_name": first_name, "last_name": last_name, "title": book_title, "publisher": publisher_name}
+        new_df = pd.Series(new_data)
+        return pd.concat([data, new_df], ignore_index=True)
 
 
 def output_author_hierarchy(data):
@@ -89,8 +96,12 @@ def main():
     """The main entry point of the programme"""
 
     # Get the resources for the programme
-    with resources.path("data", "author_book_publisher.csv") as filepath:
-        data = get_data(filepath)
+    try:
+        with resources.path("data", "author_book_publisher.csv") as filepath:
+            data = get_data(filepath)
+    except FileNotFoundError:
+        with open(f"{path_to_data_folder}/author_book_publisher.csv") as filepath:
+            data = get_data(filepath)
     
     # Get the number of books printed by each publisher
     books_by_publisher = get_books_by_publisher(data, ascending=False)

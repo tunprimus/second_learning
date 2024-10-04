@@ -73,7 +73,7 @@ def add_new_book(data, author_name, book_title, publisher_name):
     except AttributeError:
         new_data = {"first_name": first_name, "last_name": last_name, "title": book_title, "publisher": publisher_name}
         new_df = pd.DataFrame([new_data])
-        return pd.concat([data, new_df], ignore_index=True)
+        return data = pd.concat([data, new_df], ignore_index=True)
 
 
 def output_author_hierarchy(data):

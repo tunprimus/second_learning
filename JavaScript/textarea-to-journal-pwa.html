@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Textarea to Journal PWA</title>
+	<style>
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+		}
+
+		.body {
+			height: 100vh;
+			display: grid;
+			justify-items: center;
+			align-items: center;
+			/* place-items: center; */
+		}
+
+		.textarea {
+			min-width: 20rem;
+			border: 0.0625rem solid #CCCCCC;
+			font: inherit;
+			padding: 1rem;
+		}
+
+		.label {
+			display: block;
+		}
+	</style>
+</head>
+<body class="body">
+	<h1 class="h1">Jotter Clone</h1>
+	<label for="textarea" class="label">Add some text</label>
+	<textarea name="" id="textarea" class="textarea"></textarea>
+
+	<!-- JavaScript Here -->
+	<script>
+		const textArea = document.querySelectorAll('textarea')[0];
+		const storageKey = 'jotter_text';
+
+		function init() {
+			textArea.value = localStorage.getItem(storageKey);
+
+			textArea.addEventListener('input', function() {
+				localStorage.setItem(storageKey, textArea.value);
+			});
+		}
+
+		init();
+	</script>
+	<script src="text-area-to-journal-pwa.js"></script>
+</body>
+</html>

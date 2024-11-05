@@ -1,0 +1,40 @@
+<!-- Adapted from ->Building a Dictaphone Using Media Recorder and getUserMedia https://24ways.org/2019/building-a-dictaphone-using-media-recorder-and-getusermedia/ -->
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Web Dictaphone</title>
+	<link rel="stylesheet" href="./styles/style.css">
+	<script src="./js/app.js" defer></script>
+</head>
+<body class="body">
+	<div class="wrapper">
+		<header class="header">
+			<h1 class="h1">Web Dictaphone</h1>
+		</header>
+
+		<!-- Controls -->
+		<section class="section main-controls">
+			<canvas class="canvas visualiser" height="60px"></canvas>
+			<div class="buttons-wrapper">
+				<button class="button buttons-wrapper__button record">Record</button>
+				<button class="button buttons-wrapper__button stop">Stop</button>
+			</div>
+		</section>
+
+		<!-- Controls -->
+		<section class="section sound-clips"></section>
+	</div>
+
+	<label for="toggle" class="label">❔</label>
+	<input type="checkbox" id="toggle" class="input-checkbox toggle">
+	<aside class="aside">
+		<h2 class="h2 aside__heading">Information</h2>
+
+		<p class="p aside__text">Web dictaphone is built using <a class="link aside__link" href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator.getUserMedia">getUserMedia</a> and the <a class="link aside__link" href="https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder_API">MediaRecorder API</a>, which provides an easier way to capture Media streams.</p>
+
+		<p class="p aside__text">Icon courtesy of <a class="link aside__link" href="http://findicons.com/search/microphone">Find Icons</a>. Thanks to <a class="link aside__link" href="http://soledadpenades.com/">Sole</a> for the Oscilloscope code!</p>
+	</aside>
+</body>
+</html>

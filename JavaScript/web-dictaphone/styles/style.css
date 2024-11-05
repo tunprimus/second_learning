@@ -1,0 +1,170 @@
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+.body {
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	font-size: 0.8rem;
+}
+
+.wrapper {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.h1,
+.h2 {
+	font-size: 2rem;
+	font-weight: normal;
+	text-align: center;
+	padding: 0.5rem 0 0 0;
+}
+
+.main-controls {
+	padding: 0.5rem 0;
+}
+
+.canvas {
+	display: block;
+	margin-top: 0.5rem;
+}
+
+.buttons-wrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.buttons-wrapper__button {
+	font-size: 1rem;
+	padding: 1rem;
+	width: calc(50% - 0.25rem);
+	border-radius: 0.25rem;
+}
+
+.button {
+	font-size: 1rem;
+	background-color: #0088CC;
+	text-align: center;
+	color: white;
+	border: none;
+	padding: 0.5rem;
+	transition: all 0.2s;
+	cursor: pointer;
+}
+
+.button:hover,
+.button:focus {
+	box-shadow: inset 0 0 10px rgba(255, 255, 255, 1);
+	background-color: #00AAEE;
+	border-radius: 0.5rem;
+}
+
+.button:active {
+	box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+	transform: translateY(2px);
+	border-radius: 1rem;
+}
+
+/* Make the clips use as much space as possible, and
+ * also show a scrollbar when there are too many clips to show
+ * in the available space */
+.sound-clips {
+	flex: 1;
+	overflow: auto;
+}
+
+.section,
+.article {
+	display: block;
+}
+
+.clip {
+	padding-bottom: 1rem;
+}
+
+.audio {
+	width: 100%;
+	display: block;
+	margin: 1rem auto auto 0.5rem;
+}
+
+.clip__text {
+	display: inline-block;
+	font-size: 1rem;
+}
+
+.clip__button {
+	font-size: 1rem;
+	float: right;
+}
+
+.button__delete {
+	background-color: #FF0000;
+	padding: 0.5rem 0.75rem;
+	font-size: 0.8rem;
+}
+
+/* Checkbox hack to control information box display */
+.label {
+	position: absolute;
+	top: 2px;
+	right: 3px;
+	z-index: 5;
+	font-size: 3rem;
+	background-color: black;
+	border-radius: 0.625rem;
+	cursor: pointer;
+}
+
+.input-checkbox {
+	position: absolute;
+	top: -100px;
+}
+
+.aside {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	padding: 1rem;
+	background-color: #EFEFEF;
+	transform: translateX(100%);
+	transition: all 0.3s ease-out;
+}
+
+.aside__text {
+	font-size: 1.2rem;
+	margin: 0.5rem 0;
+}
+
+.aside__link {
+	color: #666666;
+}
+
+/* Toggled state of information box */
+.input-checkbox:checked ~ .aside {
+	transform: translateX(0);
+}
+
+/* Cursor when clip name is clicked over */
+.clip__text {
+	cursor: pointer;
+}
+
+/* Adjustments for wider screens */
+@media all and (min-width: 768px) {
+	/* Don't take all the space as readability is lost when line length goes past a certain size */
+	.wrapper {
+		width: 90%;
+		max-width: 1000px;
+		margin: 0 auto;
+	}
+}

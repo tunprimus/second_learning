@@ -1,0 +1,118 @@
+<!-- Modified from https://codepen.io/mikestreety/pen/yVNNNm -->
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Responsive CSS Tabs and Accordion</title>
+	<style>
+		/**
+		* Generic Styling
+		*/
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+		}
+
+		.body {
+			min-height: 100vh;
+			max-width: 60rem;
+			margin: 0 auto;
+			padding-top: 10vh;
+			background-color: #EEEEEE;
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+			font-size: 112%;
+			font-weight: 300;
+			line-height: 1.5;
+		}
+
+		.tabs {
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+		.tabs__label {
+			order: 1;
+			display: block;
+			padding: 1rem 2rem;
+			margin-right: 0.2rem;
+			background-color: #90CAF9;
+			font-weight: bold;
+			cursor: pointer;
+			transition: background-color 0.2s ease;
+		}
+
+		.tabs__tab {
+			order: 99;
+			flex-grow: 1;
+			width: 100%;
+			padding: 1rem;
+			background-color: #FFFFFF;
+			display: none;
+		}
+
+		.tabs__radio {
+			display: none;
+		}
+
+		.tabs__radio:checked + .tabs__label {
+			background-color: #FFFFFF;
+		}
+
+		.tabs__radio:checked + .tabs__label + .tab {
+			display: block;
+		}
+
+		@media screen and (max-width: 35rem) {
+			.tabs__tab,
+			.tabs__label {
+				order: initial;
+			}
+
+			.tabs__label {
+				width: 100%;
+				margin-right: 0;
+				margin-top: 0.2rem;
+			}
+		}
+	</style>
+</head>
+<body class="body">
+	<h1 class="h1">Responsive CSS Tabs and Accordion</h1>
+	<section class="tabs tabs-wrapper">
+		<!-- 1st Group of Tabs and Contents -->
+		<input type="radio" class="input-radio tabs__radio" name="tabs" id="tab01" checked>
+		<label for="tab01" class="label input-label tabs__label">Tab One</label>
+		<div class="tab tabs__tab tab01__div">
+			<h2 class="h1 tab__heading tab01__heading">Tab One Content</h2>
+			<p class="p tab__text tab01__text">Nor childe stalked and to atonement his from, what sore bliss to nor formed vile. Pillared of visit and nor his, aught the glare he lands when visit felt, from and dote him breast but aught any bacchanals whose. Thy open from amiss childe flash cared call objects, his rhyme.</p>
+			<p class="p tab__text tab01__text">Open perched quoth him unbroken sure my thy smiling. Thy all name distant this some wrought deep, prophet came morrow while again seraphim land one and a. Bird what grim implore that truly. Within loneliness dirges implore meant weak still. And caught i a the. Then then tinkled late quoth.</p>
+		</div>
+		<!-- 2nd Group of Tabs and Contents -->
+		<input type="radio" class="input-radio tabs__radio" name="tabs" id="tab02">
+		<label for="tab02" class="label input-label tabs__label">Tab Two</label>
+		<div class="tab tabs__tab tab02__div">
+			<h2 class="h1 tab__heading tab02__heading">Tab Two Content</h2>
+			<p class="p tab__text tab02__text">Of meaning little ungainly be and of, on my never nevermore i tufted a presently. Implore madam she chamber thing. Sir only.</p>
+			<p class="p tab__text tab02__text">Olden be my neer ere childe name, eremites sacred later a yea of. Was venerable me heart counsel. At clay not fabled, are lurked said but sight, memory kiss nor sore a time been him, aye sullen nor he gild in mammon.</p>
+		</div>
+		<!-- 3rd Group of Tabs and Contents -->
+		<input type="radio" class="input-radio tabs__radio" name="tabs" id="tab03">
+		<label for="tab03" class="label input-label tabs__label">Tab Three</label>
+		<div class="tab tabs__tab tab03__div">
+			<h2 class="h1 tab__heading tab03__heading">Tab Three Content</h2>
+			<p class="p tab__text tab03__text">di per. O d'esse sí  da si, o. ora e sua e lui, e sue e. Al di noi volta. non per non, di e del, gli in sé o verso noi. sua i che.</p>
+			<p class="p tab__text tab03__text">Then then tinkled late quoth. Open perched quoth him unbroken sure my thy smiling. At clay not fabled, are lurked said but sight, memory kiss nor sore a time been him. Bird what grim implore that truly. Within loneliness dirges implore meant weak still. And caught i a the.</p>
+		</div>
+		<!-- 4th Group of Tabs and Contents -->
+		<input type="radio" class="input-radio tabs__radio" name="tabs" id="tab04">
+		<label for="tab04" class="label input-label tabs__label">Tab Four</label>
+		<div class="tab tabs__tab tab04__div">
+			<h2 class="h1 tab__heading tab04__heading">Tab Four Content</h2>
+			<p class="p tab__text tab04__text">Within loneliness dirges implore meant weak still. Pillared of visit and nor his, aught the glare he lands when visit felt, from and dote him breast but aught any bacchanals whose. Thy open from amiss childe flash cared call objects, his rhyme.</p>
+			<p class="p tab__text tab04__text">Bird what grim implore that truly. Open perched quoth him unbroken sure my thy smiling. Thy all name distant this some wrought deep, prophet came morrow while again seraphim land one and a. Nor childe stalked and to atonement his from, what sore bliss to nor formed vile. And caught i a the. Then then tinkled late quoth.</p>
+		</div>
+	</section>
+</body>
+</html>

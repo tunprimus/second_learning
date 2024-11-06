@@ -1,0 +1,224 @@
+<!-- Adapted from https://codepen.io/dmitrysharabin/pen/qBBNjZP -->
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		:root {
+			--main-colour: hsl(232, 47%, 56%);
+			--main-colour-accent: hsl(230, 58%, 30%);
+			--text-colour: hsl(208, 13%, 45%);
+			--text-colour-accent: hsl(235, 26%, 35%);
+			--background-colour: hsl(220, 38%, 97%);
+			--line-colour: hsl(249, 20%, 86%);
+			--max-width: 60rem;
+			--min-width: 15rem;
+		}
+
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+		}
+
+		.body {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			margin: 0 auto;
+			min-width: var(--min-width);
+			max-width: var(--max-width);
+			min-height: 100vh;
+			color: var(--text-colour);
+			background-color: var(--background-colour);
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+		}
+
+		.body > .p {
+			margin: 1rem 2rem;
+			text-align: center;
+		}
+
+		[mv-app] {
+			min-width: var(--min-width);
+			max-width: 90vw;
+			background-color: white;
+			border-radius: 0.5rem;
+			box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 35px 2px -20px #e7e7ef;
+		}
+
+		[mv-app] > [property=headline] {
+			margin: 0;
+			padding: 1.1rem 1rem;
+			text-align: center;
+			color: var(--text-colour-accent);
+			border-bottom: 1px solid var(--line-colour);
+		}
+
+		.tabs {
+			display: grid;
+			grid-template-columns: repeat(var(--count, 5), minmax(8em, 1fr));
+			grid-template-rows: auto auto;
+		}
+
+		.details[property=tab] {
+			display: contents;
+		}
+
+		.details[property=tab][open][property=content] {
+			grid-column: 1/-1;
+			width: auto;
+		}
+
+		.details[property=tab]:not[open][property=title] {
+			color: #8C90AB;
+			background-color: #F5F7FA;
+			border-bottom: 1px solid var(--line-colour);
+		}
+
+		.details[property=tab]:not[open][property=title] .icon {
+			filter: grayscale(85%) opacity(45%);
+		}
+
+		.details[property=tab]:not[open][property=content] {
+			display: none;
+		}
+
+		.details[property=tab]:first-child[property=title] {
+			border-left: none;
+		}
+
+		[property=title] {
+			grid-row: 1;
+			padding: 1rem;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			border-left: 1px solid var(--line-colour);
+			color: var(--main-colour);
+			text-align: center;
+			list-style: none;
+		}
+
+		[property=title]::-webkit-details-marker {
+			display: none;
+		}
+
+		[property=title] .icon {
+			max-height: 5rem;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 1rem;
+		}
+
+		[property=title]:focus {
+			outline: none;
+		}
+
+		[property=content] {
+			grid-row: 2;
+			padding: 3rem 1rem;
+			display: grid;
+			grid-template-columns: 1.5fr 2fr;
+			grid-column-gap: 1.2rem;
+			grid-template-areas: "image headline" "image text" "image link";
+		}
+
+		[property=content] [property=image] {
+			grid-area: image;
+			max-width: 70%;
+			max-height: 22rem;
+			margin: auto;
+		}
+
+		[property=content] [property=headline] {
+			grid-area: headline;
+			margin-top: 0.5rem;
+			color: var(--main-colour);
+			font-size: 170%;
+		}
+
+		[property=content] [property=headline]:not([mv-mode=edit]) {
+			-webkit-background-clip: text;
+      background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-image: linear-gradient(to right, var(--main-color), var(--main-color-accent));
+		}
+
+		[property=content] [property=text] {
+			grid-area: text;
+			line-height: 1.5;
+		}
+
+		[property=content] [property=url] {
+			grid-area: link;
+			align-self: center;
+			display: block;
+			width: -webkit-max-content;
+			width: -moz-max-content;
+			width: max-content;
+			margin-top: 1.5rem;
+			padding: 0.7rem 2rem;
+			color: white;
+			background-image: linear-gradient(135deg, var(--main-colour), var(--main-colour-accent));
+			border-radius: 999px;
+			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+			font-size: 0.8rem;
+			text-decoration: none;
+			text-transform: uppercase;
+			letter-spacing: 0.05rem;
+		}
+
+		[property=content] [property=url]:hover {
+			filter: brightness(135%);
+		}
+
+		[mv-app][mv-mode=edit] [property=open] {
+			display: none;
+		}
+
+		.footer {
+			margin-top: 3rem;
+			text-align: center;
+		}
+
+		.footer__link {
+			color: var(--main-colour);
+		}
+
+		::-moz-focus-inner {
+			border: 0;
+		}
+	</style>
+</head>
+<body class="body">
+	<!-- Illustrations: https://undraw.co/ -->
+	<main class="main" mv-app="tabs" mv-bar="no-login" mv-storage="https://github.com/DmitrySharabin/mavo-tabs-widget">
+		<h2 class="h2" property="headline">Headline</h2>
+		<section class="section main__section" mv-list class="tabs" style="--count: [count(tab)];">
+			<details class="details" property="tab" mv-list-item open="[open]" mv-action="set(open.$all, false), set(open, true)">
+				<meta property="open"/>
+				<summary class="summary" property="title">
+					<img class="img icon" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1457119/undraw_research.svg" mv-attr-src="image" alt="Icon for the [text] tab" />
+					<span class="span" property="text">Tab name</span>
+				</summary>
+				<section class="section details__section details__content" property="content">
+					<h3 class="h3 details__content-heading" property="headline">Tab heading</h3>
+					<img class="img icon details__content-img" property="image" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1457119/undraw_research.svg" alt="Illustration for [headline]" />
+					<p class="p details__content-text" property="text">Tab content</p>
+					<a class="link details__content-link" href="#" property="url">
+						<span class="span link__span" property="destination">Call to action</span>
+					</a>
+				</section>
+			</details>
+		</section>
+	</main>
+	<footer class="footer">
+		<p class="p footer__text">Want to see how it works under the hood and/or add your content? Simply <a class="link footer__link" href="?login">log in</a> with your <b>Gitlab</b> account.</p>
+		<p class="p footer__text">Made with Mavo. Want to know more? Visit the <a class="link footer__link" href="https://mavo.io/">Mavo website</a>.</p>
+	</footer>
+</body>
+</html>

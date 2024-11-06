@@ -1,0 +1,471 @@
+<!-- Modified from https://codepen.io/fusco/pen/Wvzjrm -->
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Transitioning Between Variable Heights with CSS Tabs</title>
+	<style>
+		/* Routine stuff */
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+		}
+
+		.body {
+			background-color: #EFEFEF;
+			color: #777777;
+			padding: 30px 0;
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+			font-weight: 300;
+		}
+
+		.container {
+			margin: 0 auto;
+			display: block;
+			max-width: 800px;
+		}
+
+		.container > *:not(.tab-wrap) {
+			padding: 0 11%;
+		}
+
+		.h1,
+		.h2 {
+			margin: 0;
+			color: #444444;
+			font-weight: 400;
+			text-align: center;
+		}
+
+		.h2 {
+			font-size: 1em;
+			margin-top: 30px;
+		}
+
+		.h3 {
+			font-weight: 400;
+		}
+
+		.p {
+			line-height: 1.6;
+			margin-top: 20px;
+		}
+
+		/* Tabs stuff */
+		.tab-wrap {
+			display: flex;
+			flex-wrap: wrap;
+			max-width: 100%;
+			position: relative;
+			margin: 40px 0;
+			background-color: #FFFFFF;
+			border-radius: 6px;
+			list-style: none;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+			transition: 0.3s box-shadow ease;
+		}
+
+		.tab-wrap:hover {
+			box-shadow: 0 12px 23px rgba(0, 0, 0, 0.23), 0 10px 10px rgba(0, 0, 0, 0.19);
+		}
+
+		.tab {
+			display: none;
+		}
+
+		.tab:checked:nth-of-type(1) ~ .tab-content:nth-of-type(1) {
+			position: relative;
+			top: 0;
+			z-index: 100;
+			opacity: 1;
+			text-shadow: 0 0 0;
+			transform: translateY(0px);
+			transition: 0.5s opacity ease-in, 0.8s transform ease;
+		}
+
+		.tab:checked:nth-of-type(2) ~ .tab-content:nth-of-type(2) {
+			position: relative;
+			top: 0;
+			z-index: 100;
+			opacity: 1;
+			text-shadow: 0 0 0;
+			transform: translateY(0px);
+			transition: 0.5s opacity ease-in, 0.8s transform ease;
+		}
+
+		.tab:checked:nth-of-type(3) ~ .tab-content:nth-of-type(3) {
+			position: relative;
+			top: 0;
+			z-index: 100;
+			opacity: 1;
+			text-shadow: 0 0 0;
+			transform: translateY(0px);
+			transition: 0.5s opacity ease-in, 0.8s transform ease;
+		}
+
+		.tab:checked:nth-of-type(4) ~ .tab-content:nth-of-type(4) {
+			position: relative;
+			top: 0;
+			z-index: 100;
+			opacity: 1;
+			text-shadow: 0 0 0;
+			transform: translateY(0px);
+			transition: 0.5s opacity ease-in, 0.8s transform ease;
+		}
+
+		.tab:checked:nth-of-type(5) ~ .tab-content:nth-of-type(5) {
+			position: relative;
+			top: 0;
+			z-index: 100;
+			opacity: 1;
+			text-shadow: 0 0 0;
+			transform: translateY(0px);
+			transition: 0.5s opacity ease-in, 0.8s transform ease;
+		}
+
+		.tab:first-of-type:not(:last-of-type) + .label {
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+
+		.tab:not(:first-of-type):not(:last-of-type) + .label {
+			border-radius: 0;
+		}
+
+		.tab:last-of-type:not(:first-of-type) + .label {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+
+		.tab:checked + .label {
+			background-color: #FFFFFF;
+			box-shadow: inset 0 -1px 0 #FFFFFF;
+			cursor: default;
+		}
+
+		.tab:checked + .label:hover {
+			background-color: #00FFFF;
+			color: black;
+			font-weight: bolder;
+			box-shadow: inset 0 -1px 0 #FFFFFF;
+		}
+
+		.tab + .label {
+			display: block;
+			flex-grow: 3;
+			height: 50px;
+			padding: 15px;
+			background-color: lightgrey;
+			color: #333333;
+			text-decoration: none;
+			text-align: center;
+			border-radius: 6px 6px 0 0;
+			box-shadow: inset 0 -1px 0 #FFFFFF;
+			transition: background-color 0.3s ease;
+			cursor: pointer;
+			-ms-user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			user-select: none;
+		}
+
+		.tab + .label:hover {
+			background-color: #3F3F3F;
+			color: #F9F9F9;
+			box-shadow: inset 0 1px 0 #F4F4F4;
+		}
+
+		.label {
+			border-right: 1px solid #3F3F3F;
+		}
+
+		.label:last-of-type {
+			border-right: none;
+		}
+
+		.tab-content {
+			position: absolute;
+			left: 0;
+			width: 100%;
+			padding: 10px 25px;
+			background-color: transparent;
+			z-index: -1;
+			opacity: 0;
+			border-radius: 6px;
+			transform: translateY(-3px);
+		}
+	</style>
+</head>
+<body class="body">
+	<h1 class="h1">CSS Tabs</h1>
+	<h2 class="h2">Transitioning Between Variable Heights</h2>
+
+	<div class="container">
+		<!-- Demo Section 01 -->
+		<section class="section demo-section demo-section01">
+			<p class="p demo-section__text">
+				They by day deemed breast seek eros weary spent. To sought misery rill knew, he hall still than flow. Shameless.
+			</p>
+		</section>
+		<!-- Wrap Section 01 -->
+		<section class="section tab-wrap tab-wrap01">
+			<!-- Radio inputs with active tab on page load gets checked attribute -->
+			<input type="radio" name="tab-group01" class="input-radio tab tab-group01__input" id="tab01" checked>
+			<label for="tab01" class="label tab-group01__label">Short</label>
+			<input type="radio" name="tab-group01" class="input-radio tab tab-group01__input" id="tab02">
+			<label for="tab02" class="label tab-group01__label">Medium</label>
+			<input type="radio" name="tab-group01" class="input-radio tab tab-group01__input" id="tab03">
+			<label for="tab03" class="label tab-group01__label">Long</label>
+			<!-- Corresponding contents containers for above inputs -->
+			<!-- Tab content 01 -->
+			<div class="tab-content tab-content01">
+				<h3 class="h3 tab-content__heading">Short Section</h3>
+				<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.</p>
+			</div>
+			<!-- Tab content 02 -->
+			<div class="tab-content tab-content02">
+				<h3 class="h3 tab-content__heading">Medium Section</h3>
+				<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+				<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+			</div>
+			<!-- Tab content 03 -->
+			<div class="tab-content tab-content03">
+				<h3 class="h3 tab-content__heading">Long Section</h3>
+				<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+				<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+				<p class="p tab-content__text">My seeing one back this that, purple on a at or, surely perched i. Ever beguiling darkness see he dying , stock minute least and quoth vainly a chamber me. Suddenly on ominous.</p>
+				<p class="p tab-content__text">Gild his wight bacchanals though might, but could woe sister all consecrate had and left. Ear concubines lyres lands it long where aye. Another it yet a on youth and artless and. Most night childe but rake, nor shamed are deem beyond. Of scene wrong than or to mood.</p>
+			</div>
+		</section>
+
+		<!-- Divider 1/2 -->
+		<hr class="hr">
+
+		<!-- Demo Section 02 -->
+		<section class="section demo-section demo-section02">
+			<p class="p demo-section__text">
+				They by day deemed breast seek eros weary spent. To sought misery rill knew, he hall still than flow. ShamelessChe nel santo come da gli. che fosse ci. Whom a fiend bore only bosoms yore. The the followed i relevancy the thy on midnight. Was nevermore and many nothing chamber. Rustling spoken cannot my there crest this a desolate and. Of his lenore my some is ashore, and december take undaunted startled that shutter, hear is is on.
+			</p>
+			<p class="p demo-section__text">
+				Whom a fiend bore only bosoms yore. The the followed i relevancy the thy on midnight. Was nevermore and many nothing chamber. Rustling spoken cannot my there crest this a desolate and. Of his lenore my some is ashore, and december take undaunted startled that shutter, hear is is onNine bade been save hap not, a care from mirthful given things what deadly that hells, dwelt and long deserted was in bacchanals thy if. They by day deemed breast seek eros weary spent. To sought misery rill knew, he hall still than flow. ShamelessChe nel santo come da gli. che fosse ci.  Ye labyrinth him disporting so in but charms they. The woman later kiss but, than and shrine childe or rake. Or was eremites from festal in, deemed bliss from bade nor. Of might glorious adieu did had despair one upon however, not mine harold like minstrels his not, from satiety tales.
+			</p>
+		</section>
+		<!-- Wrap Section 02 -->
+		<section class="section tab-wrap tab-wrap02">
+			<!-- Radio inputs with active tab on page load gets checked attribute -->
+			<input type="radio" name="tab-group02" class="input-radio tab tab-group02__input" id="tab04" checked>
+			<label for="tab04" class="label tab-group02__label">Apples</label>
+			<input type="radio" name="tab-group02" class="input-radio tab tab-group02__input" id="tab05">
+			<label for="tab05" class="label tab-group02__label">Oranges</label>
+			<input type="radio" name="tab-group02" class="input-radio tab tab-group02__input" id="tab06">
+			<label for="tab06" class="label tab-group02__label">Bananas</label>
+			<input type="radio" name="tab-group02" class="input-radio tab tab-group02__input" id="tab07">
+			<label for="tab07" class="label tab-group02__label">Kiwis</label>
+			<input type="radio" name="tab-group02" class="input-radio tab tab-group02__input" id="tab08">
+			<label for="tab08" class="label tab-group02__label">Tomatoes</label>
+			<!-- Corresponding contents containers for above inputs -->
+			<!-- Tab content 04 -->
+			<div class="tab-content tab-content04">
+				<h3 class="h3 tab-content__heading">Apples</h3>
+				<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.</p>
+				<p class="p tab-content__text">Gild his wight bacchanals though might, but could woe sister all consecrate had and left. Ear concubines lyres lands it long where aye. Another it yet a on youth and artless and. Most night childe but rake, nor shamed are deem beyond. Of scene wrong than or to mood.</p>
+			</div>
+			<!-- Tab content 05 -->
+			<div class="tab-content tab-content05">
+				<h3 class="h3 tab-content__heading">Oranges</h3>
+				<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+				<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+			</div>
+			<!-- Tab content 06 -->
+			<div class="tab-content tab-content06">
+				<h3 class="h3 tab-content__heading">Bananas</h3>
+				<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+				<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+				<p class="p tab-content__text">My seeing one back this that, purple on a at or, surely perched i. Ever beguiling darkness see he dying , stock minute least and quoth vainly a chamber me. Suddenly on ominous.</p>
+				<p class="p tab-content__text">Gild his wight bacchanals though might, but could woe sister all consecrate had and left. Ear concubines lyres lands it long where aye. Another it yet a on youth and artless and. Most night childe but rake, nor shamed are deem beyond. Of scene wrong than or to mood.</p>
+			</div>
+			<!-- Tab content 07 -->
+			<div class="tab-content tab-content07">
+				<h3 class="h3 tab-content__heading">Kiwis</h3>
+				<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+				<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+			</div>
+			<!-- Tab content 08 -->
+			<div class="tab-content tab-content08">
+				<h3 class="h3 tab-content__heading">Tomatoes</h3>
+				<p class="p tab-content__text">No utters darkness memories from again i lamplight all. Quaint lordly that oer a my sad on grim. Hath head. I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+				<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+			</div>
+		</section>
+
+		<!-- Divider 2/3 -->
+		<hr class="hr">
+
+		<!-- Demo Section 03 -->
+		<section class="section demo-section demo-section03">
+			<p class="p demo-section__text">
+				Quaint lordly that oer a my sad on grim. Hath head. I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs Whom a fiend bore only bosoms yore. The the followed i relevancy the thy on midnight. Was nevermore and many nothing chamber. Rustling spoken cannot my there crest this a desolate and. Of his lenore my some is ashore, and december take undaunted startled that shutter, hear is is on.
+			</p>
+			<p class="p demo-section__text">
+				To sought misery rill knew, he hall still than flow. Another it yet a on youth and artless and. Most night childe but rake, nor shamed are deem beyond. Of scene wrong than or to mood, a care from mirthful given things what deadly that hells, dwelt and long deserted was in bacchanals thy if. They by day deemed breast seek eros weary spent. ShamelessChe nel santo come da gli. che fosse ci.  Ye labyrinth him disporting so in but charms they. The woman later kiss but, than and shrine childe or rake. Or was eremites from festal in, deemed bliss from bade nor. Of might glorious adieu did had despair one upon however, not mine harold like minstrels his not, from satiety tales.
+			</p>
+		</section>
+		<!-- Wrap Section 03 -->
+		<section class="section tab-wrap tab-wrap03">
+			<!-- Radio inputs with active tab on page load gets checked attribute -->
+			<input type="radio" name="tab-group03" class="input-radio tab tab-group03__input" id="tab09" checked>
+			<label for="tab09" class="label tab-group03__label">Short</label>
+			<input type="radio" name="tab-group03" class="input-radio tab tab-group03__input" id="tab10">
+			<label for="tab10" class="label tab-group03__label">Medium</label>
+			<input type="radio" name="tab-group03" class="input-radio tab tab-group03__input" id="tab11">
+			<label for="tab11" class="label tab-group03__label">Long</label>
+			<!-- Corresponding contents containers for above inputs -->
+			<!-- Tab content 09 -->
+			<div class="tab-content tab-content09">
+				<details class="details tab-content__details">
+					<summary class="summary tab-content__summary">Short Section</summary>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.</p>
+				</details>
+			</div>
+			<!-- Tab content 10 -->
+			<div class="tab-content tab-content10">
+				<details class="details tab-content__details">
+					<summary class="summary tab-content__summary">Medium Section</summary>
+					<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+				</details>
+			</div>
+			<!-- Tab content 11 -->
+			<div class="tab-content tab-content11">
+				<details class="details tab-content__details">
+					<summary class="summary tab-content__summary">Long Section</summary>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+					<p class="p tab-content__text">Gild his wight bacchanals though might, but could woe sister all consecrate had and left. Ear concubines lyres lands it long where aye. Another it yet a on youth and artless and. Most night childe but rake, nor shamed are deem beyond. Of scene wrong than or to mood.</p>
+					<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+					<p class="p tab-content__text">My seeing one back this that, purple on a at or, surely perched i. Ever beguiling darkness see he dying , stock minute least and quoth vainly a chamber me. Suddenly on ominous.</p>
+				</details>
+			</div>
+		</section>
+
+		<!-- Divider 3/4 -->
+		<hr class="hr">
+
+		<!-- Demo Section 04 -->
+		<section class="section demo-section demo-section04">
+			<p class="p demo-section__text">
+				Quaint lordly that oer a my sad on grim. Hath head. I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs Whom a fiend bore only bosoms yore. The the followed i relevancy the thy on midnight. Was nevermore and many nothing chamber. Rustling spoken cannot my there crest this a desolate and. Of his lenore my some is ashore, and december take undaunted startled that shutter, hear is is on.
+			</p>
+			<p class="p demo-section__text">
+				To sought misery rill knew, he hall still than flow. Another it yet a on youth and artless and. Most night childe but rake, nor shamed are deem beyond. Of scene wrong than or to mood, a care from mirthful given things what deadly that hells, dwelt and long deserted was in bacchanals thy if. They by day deemed breast seek eros weary spent. ShamelessChe nel santo come da gli. che fosse ci.  Ye labyrinth him disporting so in but charms they. The woman later kiss but, than and shrine childe or rake. Or was eremites from festal in, deemed bliss from bade nor. Of might glorious adieu did had despair one upon however, not mine harold like minstrels his not, from satiety tales.
+			</p>
+		</section>
+		<!-- Wrap Section 04 -->
+		<section class="section tab-wrap tab-wrap04">
+			<!-- Radio inputs with active tab on page load gets checked attribute -->
+			<input type="radio" name="tab-group04" class="input-radio tab tab-group04__input" id="tab12" checked>
+			<label for="tab12" class="label tab-group04__label">Short</label>
+			<input type="radio" name="tab-group04" class="input-radio tab tab-group04__input" id="tab13">
+			<label for="tab13" class="label tab-group04__label">Medium</label>
+			<input type="radio" name="tab-group04" class="input-radio tab tab-group04__input" id="tab14">
+			<label for="tab14" class="label tab-group04__label">Long</label>
+			<input type="radio" name="tab-group04" class="input-radio tab tab-group04__input" id="tab15">
+			<label for="tab15" class="label tab-group04__label">Extra Long</label>
+			<!-- Corresponding contents containers for above inputs -->
+			<!-- Tab content 12 -->
+			<div class="tab-content tab-content12">
+				<!-- 1st details element -->
+				<details class="details tab-content__details tab-content__details01" open>
+					<summary class="summary tab-content__summary tab-content__summary01">Short Section 01</summary>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.</p>
+				</details>
+				<!-- 2nd details element -->
+				<details class="details tab-content__details tab-content__details02">
+					<summary class="summary tab-content__summary tab-content__summary02">Short Section 02</summary>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.</p>
+				</details>
+			</div>
+			<!-- Tab content 13 -->
+			<div class="tab-content tab-content13">
+				<!-- 1st details element -->
+				<details class="details tab-content__details tab-content__details01" open>
+					<summary class="summary tab-content__summary tab-content__summary01">Medium Section 01</summary>
+					<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+				</details>
+				<!-- 2nd details element -->
+				<details class="details tab-content__details tab-content__details02">
+					<summary class="summary tab-content__summary tab-content__summary02">Medium Section 02</summary>
+					<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+				</details>
+			</div>
+			<!-- Tab content 14 -->
+			<div class="tab-content tab-content14">
+				<!-- 1st details element -->
+				<details class="details tab-content__details tab-content__details01" open>
+					<summary class="summary tab-content__summary tab-content__summary01">Long Section 01</summary>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+					<p class="p tab-content__text">Gild his wight bacchanals though might, but could woe sister all consecrate had and left. Ear concubines lyres lands it long where aye. Another it yet a on youth and artless and. Most night childe but rake, nor shamed are deem beyond. Of scene wrong than or to mood.</p>
+					<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+					<p class="p tab-content__text">My seeing one back this that, purple on a at or, surely perched i. Ever beguiling darkness see he dying , stock minute least and quoth vainly a chamber me. Suddenly on ominous.</p>
+				</details>
+				<!-- 2nd details element -->
+				<details class="details tab-content__details tab-content__details02">
+					<summary class="summary tab-content__summary tab-content__summary02">Long Section 02</summary>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+					<p class="p tab-content__text">Gild his wight bacchanals though might, but could woe sister all consecrate had and left. Ear concubines lyres lands it long where aye. Another it yet a on youth and artless and. Most night childe but rake, nor shamed are deem beyond. Of scene wrong than or to mood.</p>
+					<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+					<p class="p tab-content__text">My seeing one back this that, purple on a at or, surely perched i. Ever beguiling darkness see he dying , stock minute least and quoth vainly a chamber me. Suddenly on ominous.</p>
+				</details>
+				<!-- 3rd details element -->
+				<details class="details tab-content__details tab-content__details03">
+					<summary class="summary tab-content__summary tab-content__summary03">Long Section 03</summary>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+					<p class="p tab-content__text">Gild his wight bacchanals though might, but could woe sister all consecrate had and left. Ear concubines lyres lands it long where aye. Another it yet a on youth and artless and. Most night childe but rake, nor shamed are deem beyond. Of scene wrong than or to mood.</p>
+					<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+					<p class="p tab-content__text">My seeing one back this that, purple on a at or, surely perched i. Ever beguiling darkness see he dying , stock minute least and quoth vainly a chamber me. Suddenly on ominous.</p>
+				</details>
+			</div>
+			<!-- Tab content 15 -->
+			<div class="tab-content tab-content15">
+				<!-- 1st details element -->
+				<details class="details tab-content__details tab-content__details01" open>
+					<summary class="summary tab-content__summary tab-content__summary01">Extra Long Section 01</summary>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+					<p class="p tab-content__text">Gild his wight bacchanals though might, but could woe sister all consecrate had and left. Ear concubines lyres lands it long where aye. Another it yet a on youth and artless and. Most night childe but rake, nor shamed are deem beyond. Of scene wrong than or to mood.</p>
+					<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+					<p class="p tab-content__text">My seeing one back this that, purple on a at or, surely perched i. Ever beguiling darkness see he dying , stock minute least and quoth vainly a chamber me. Suddenly on ominous.</p>
+				</details>
+				<!-- 2nd details element -->
+				<details class="details tab-content__details tab-content__details02">
+					<summary class="summary tab-content__summary tab-content__summary02">Extra Long Section 02</summary>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+					<p class="p tab-content__text">Gild his wight bacchanals though might, but could woe sister all consecrate had and left. Ear concubines lyres lands it long where aye. Another it yet a on youth and artless and. Most night childe but rake, nor shamed are deem beyond. Of scene wrong than or to mood.</p>
+					<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+					<p class="p tab-content__text">My seeing one back this that, purple on a at or, surely perched i. Ever beguiling darkness see he dying , stock minute least and quoth vainly a chamber me. Suddenly on ominous.</p>
+				</details>
+				<!-- 3rd details element -->
+				<details class="details tab-content__details tab-content__details03">
+					<summary class="summary tab-content__summary tab-content__summary03">Extra Long Section 03</summary>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+					<p class="p tab-content__text">Gild his wight bacchanals though might, but could woe sister all consecrate had and left. Ear concubines lyres lands it long where aye. Another it yet a on youth and artless and. Most night childe but rake, nor shamed are deem beyond. Of scene wrong than or to mood.</p>
+					<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+					<p class="p tab-content__text">My seeing one back this that, purple on a at or, surely perched i. Ever beguiling darkness see he dying , stock minute least and quoth vainly a chamber me. Suddenly on ominous.</p>
+				</details>
+				<!-- 4th details element -->
+				<details class="details tab-content__details tab-content__details04">
+					<summary class="summary tab-content__summary tab-content__summary04">Extra Long Section 04</summary>
+					<p class="p tab-content__text">More into that on above before, i fancy laden my token or one, midnight tell now it door demons raven quaff. Dreams weak myself that saintly out these. Tis.Care nor shell her childe oh him. Was dwelt a sooth still sad him, and degree be he sing to shun and the. Mood festal name passion resolved heal but festal will men. Flatterers ye save tis, flatterers.</p>
+					<p class="p tab-content__text">Gild his wight bacchanals though might, but could woe sister all consecrate had and left. Ear concubines lyres lands it long where aye. Another it yet a on youth and artless and. Most night childe but rake, nor shamed are deem beyond. Of scene wrong than or to mood.</p>
+					<p class="p tab-content__text">I distant smiling rapping above perched demons maiden wondering shore, wide raven forgiveness from a take the. Whispered oh you chamber here, my linking the chamber whether press lies a songs. The on remember.</p>
+					<p class="p tab-content__text">My seeing one back this that, purple on a at or, surely perched i. Ever beguiling darkness see he dying , stock minute least and quoth vainly a chamber me. Suddenly on ominous.</p>
+				</details>
+			</div>
+		</section>
+
+	<!-- End wrapper container -->
+	</div>
+</body>
+</html>

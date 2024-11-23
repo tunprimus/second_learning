@@ -1,0 +1,139 @@
+<!-- Adapted from https://www.freecodecamp.org/news/create-meme-generator-using-html-canvas/ -->
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Meme Generator</title>
+	<style>
+		.web-component {
+			display: block;
+		}
+
+		.body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			font-family: Arial, sans-serif;
+			background-color: rgb(121, 121, 170);
+			color: white;
+		}
+
+		.canvas {
+			margin-top: 0.625rem;
+			border: 0.125rem solid #333333;
+		}
+
+		.controls {
+			margin-top: 0.625rem;
+		}
+
+		.controls__button {
+			margin: 0.3125rem;
+		}
+
+		.generate {
+			padding: 0.375rem;
+			background-color: green;
+			font-weight: bold;
+			color: white;
+			border: none;
+			border-radius: 0.1875rem;
+			cursor: pointer;
+		}
+
+		.download {
+			padding: 0.375rem;
+			background-color: blue;
+			font-weight: bold;
+			color: white;
+			border: none;
+			border-radius: 0.1875rem;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body class="body">
+	<h1 class="h1">Meme Generator</h1>
+	<input type="file" name="" id="image_input" class="input input-file image-input" accept="image/*">
+	<meme-controls class="web-component controls">
+		<input type="text" name="" id="top_text" class="input input-text controls__input controls__input--top top-text" placeholder="Enter Top Text">
+		<input type="text" name="" id="bottom_text" class="input input-text controls__input controls__input--bottom bottom-text" placeholder="Enter Bottom Text">
+		<button type="button" id="generate" class="button controls__button controls__button--generate generate" onclick="generateMeme()">Generate Meme</button>
+		<button type="button" id="download" class="button controls__button controls__button--download download" onclick="downloadMeme()">Download Meme</button>
+	</meme-controls>
+	<canvas id="meme_canvas" class="canvas meme-canvas" width="580" height="450"></canvas>
+
+	<!-- JavaScript Here -->
+	<script>
+		const canvas = document.getElementById('meme_canvas');
+		const ctx = canvas.getContext('2d');
+		const imageInput = document.getElementById('image_input');
+		let uploadedImage = null;
+		let uploadedFileName = null;
+
+		// Load the image onto the canvas
+		imageInput.addEventListener('change', function (evt) {
+			const file = evt.target.files[0];
+			const reader = new FileReader();
+			uploadedFileName = file.name;
+			fileName = uploadedFileName.split('.')[0];
+
+			reader.onload = function (evt) {
+				const img = new Image();
+				img.src = evt.target.result;
+				img.onload = function () {
+					uploadedImage = img;
+					drawImage();
+				}
+			};
+
+			reader.readAsDataURL(file);
+		});
+
+		// Draw image and text on canvas
+		function drawImage() {
+			if (uploadedImage) {
+				// Clear canvas and set canvas dimensions to fit the image
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				ctx.drawImage(uploadedImage, 0, 0, canvas.width, canvas.height);
+
+				// Get text values
+				const topText = document.getElementById('top_text').value;
+				const bottomText = document.getElementById('bottom_text').value;
+
+				// Set text styles
+				ctx.font = '30px Impact';
+				ctx.fillStyle = 'white';
+				ctx.strokeStyle = 'black';
+				ctx.lineWidth = 2;
+				ctx.textAlign = 'center';
+
+				// Draw top text
+				ctx.fillText(topText, canvas.width / 2, 50);
+				ctx.strokeText(topText, canvas.width / 2, 50);
+
+				// Draw bottom text
+				ctx.fillText(bottomText, canvas.width / 2, canvas.height - 20);
+				ctx.strokeText(bottomText, canvas.width / 2, canvas.height - 20);
+			}
+		}
+
+		// Generate meme by drawing text on the uploaded image
+		function generateMeme() {
+			drawImage();
+		}
+
+		// Download the meme as an image
+		function downloadMeme() {
+			const re = /-|:|T/gi;
+			let currentDate = new Date();
+			let datetimeStr = currentDate.toISOString().slice(0, 19).replace(re, '');
+			const link = document.createElement('a');
+			link.download = `${datetimeStr}_${fileName}_meme.png`;
+			link.href = canvas.toDataURL();
+			link.click();
+		}
+	</script>
+</body>
+</html>

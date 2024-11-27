@@ -1,0 +1,48 @@
+<!-- Modified from https://evanminto.com/blog/intrinsically-responsive-css-grid-minmax-min/ -->
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Intrinsically Responsive CSS Grid with minmax() and min() plus fallback</title>
+	<style>
+		:root {
+			--child-width--fallback: 7.5rem;
+			--child-width--normal: 10rem;
+		}
+
+		.ul {
+			display: grid;
+			grid-gap: 1rem;
+			/* grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); */
+			/* Partially responsive fallback */
+			grid-template-columns: repeat(auto-fill, minmax(calc(10% + 7.5rem), 1fr));
+			grid-template-columns: repeat(auto-fill, minmax(calc(10% + var(--child-width--fallback, 7.5rem)), 1fr));
+			/* Fully responsive version */
+			grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr));
+			/* grid-template-columns: repeat(auto-fill, minmax(min(var(--child-width--normal, 10rem), 100%), 1fr)); */
+			padding: 0;
+			list-style: none;
+		}
+
+		.ul > * {
+			background-color: black;
+			height: 10rem;
+		}
+	</style>
+</head>
+<body>
+	<section class="section">
+		<ul class="ul">
+			<li class="list-item">1</li>
+			<li class="list-item">2</li>
+			<li class="list-item">3</li>
+			<li class="list-item">4</li>
+			<li class="list-item">5</li>
+			<li class="list-item">6</li>
+			<li class="list-item">7</li>
+			<li class="list-item">8</li>
+		</ul>
+	</section>
+</body>
+</html>

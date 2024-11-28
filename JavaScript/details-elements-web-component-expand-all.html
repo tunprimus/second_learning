@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Details Elements Expand/Collapse All</title>
+	<style>
+		:root {
+			--responsive-space: calc(8px + 1.5625vw);
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+		}
+
+		/* Change web component from inline display */
+		.web-component {
+			display: block;
+			margin-top: var(--responsive-space);
+		}
+
+		.button {
+			font: inherit;
+		}
+
+		.details + .details {
+			margin-top: var(--responsive-space);
+		}
+
+		.details[open] {
+			background-color: #C9D1E4;
+		}
+
+		.summary:hover {
+			font-weight: bold;
+		}
+
+		.details__text {
+			background-color: #4C5568;
+			color: white;
+			padding: 1rem;
+			border-radius: 0.3125rem;
+		}
+	</style>
+</head>
+<body class="body">
+	<!-- Web component for toggle buttons -->
+	<details-expand class="web-component details-expand" hidden>
+		<button class="button button--expand" type="button" action="expand">Expand All</button>
+		<button class="button button--collapse" type="button" action="collapse">Collapse All</button>
+	</details-expand>
+
+	<!-- Details elements -->
+	<details-wrapper class="web-component details-wrapper">
+		<!-- 1st details element -->
+		<details class="details">
+			<summary class="summary details__summary">APIs</summary>
+			<p class="details__text">Section 1: Peekaboo! Here's some content on APIs!</p>
+		</details>
+		<!-- 2nd details element -->
+		<details class="details">
+			<summary class="summary details__summary">Authentication</summary>
+			<p class="details__text">Section 2: Peekaboo! Here's some content on authentication!</p>
+		</details>
+		<!-- 3rd details element -->
+		<details class="details">
+			<summary class="summary details__summary">Promises</summary>
+			<p class="details__text">Section 3: Peekaboo! Here's some content on promises!</p>
+		</details>
+		<!-- 4th details element -->
+		<details class="details">
+			<summary class="summary details__summary">Security</summary>
+			<p class="details__text">Section 4: Peekaboo! Here's some content on security!</p>
+		</details>
+	</details-wrapper>
+
+	<!-- JavaScript Here -->
+	<script>
+		customElements.define('details-expand', class extends HTMLElement {
+			/**
+			 * Instantiate the web component
+			*/
+			constructor () {
+				// Get the parent class properties
+				super();
+
+				// Show the content
+				this.removeAttribute('hidden');
+
+				// Listen for events
+				this.addEventListener('click', this);
+			}
+
+			/**
+			 * Handle events
+			 */
+			handleEvent(evt) {
+				// Get the action type
+				let btn = evt.target.closest('[action]');
+				if (!btn) {
+					return;
+				}
+				let action = btn.getAttribute('action') === 'expand' ? 'setAttribute' : 'removeAttribute';
+
+				// Get all of the collapsed sections
+				let sections = document.querySelectorAll('details');
+
+				// Hide or show the content
+				for (let section of sections) {
+					section[action]('open', '');
+				}
+			}
+
+			/**
+			 * Expand an anchored section on load
+			 */
+			connectedCallback () {
+				if (!window.location.hash) {
+					return;
+				}
+				let target = document.querySelectorAll(window.location.hash)[0];
+				if (!target || !target.matches('details')) {
+					return;
+				}
+				target.setAttribute('open', '');
+			}
+		});
+	</script>
+</body>
+</html>

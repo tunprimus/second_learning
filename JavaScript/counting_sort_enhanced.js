@@ -4,8 +4,8 @@
 
 /**
  * Description
- * @param {array} input
- * @returns {array} output
+ * @param {number[]} input
+ * @returns {number[]} output
  */
 function countingSortEnhanced(input) {
 	// Find the smallest element (to account for negative values)

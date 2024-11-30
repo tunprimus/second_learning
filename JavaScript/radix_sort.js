@@ -106,6 +106,12 @@ function countingSort(input, place) {
 }
 
 
+/**
+ * Function to radix sort an array
+ *
+ * @param {number[]} input
+ * @returns {number[]}
+ */
 function radixSort(input) {
 	// Find the smallest element (to account for negative numbers)
 	const min = Math.min(...input);

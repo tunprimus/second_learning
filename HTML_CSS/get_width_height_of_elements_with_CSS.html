@@ -1,0 +1,119 @@
+<!-- Modified from: Get the width & height of any element without JavaScript https://css-tip.com/element-dimension/ -->
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Get the width & height of any element without JavaScript</title>
+	<style>
+		@property --_x {
+			syntax: "<number>";
+			inherits: true;
+			initial-value: 0;
+		}
+
+		@property --_y {
+			syntax: "<number>";
+			inherits: true;
+			initial-value: 0;
+		}
+
+		@property --width {
+			syntax: "<integer>";
+			inherits: true;
+			initial-value: 0;
+		}
+
+		@property --height {
+			syntax: "<integer>";
+			inherits: true;
+			initial-value: 0;
+		}
+
+		.size {
+			position: relative;
+			--width: calc(1 / (1 - var(--_x)));
+			--height: calc(1 / (1 - var(--_y)));
+			overflow: auto;
+			timeline-scope: --cx, --cy;
+			animation: x linear, y linear;
+			animation-timeline: --cx, --cy;
+			animation-range: entry 100% exit 100%;
+		}
+
+		.size::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 1px;
+			aspect-ratio: 1;
+			view-timeline: --cx inline, --cy block;
+		}
+
+		@keyframes x {
+			to {
+				--_x: 1;
+			}
+		}
+
+		@keyframes y {
+			to {
+				--_y: 1;
+			}
+		}
+
+		.size::after {
+			content: counter(width) "x" counter(height);
+			counter-reset: width var(--width) height var(--height);
+			position: absolute;
+			top: 0;
+			left: 0;
+			padding: 0.3em;
+			background-color: #000000;
+			color: #FFFFFF;
+			font-size: 1.4rem;
+			font-weight: bold;
+		}
+
+		.body {
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+			font-size: 1.2em;
+		}
+
+		.main {
+			display: grid;
+			grid-template-columns: 1fr 3fr;
+		}
+
+		.header,
+		.aside,
+		.section,
+		.footer {
+			margin: 0.28rem;
+			padding: 0.625rem;
+			border: 0.0625rem solid;
+		}
+
+		.image {
+			width: 100%;
+		}
+	</style>
+</head>
+<body class="body">
+	<header class="header size header-size">
+		Be old had harold formed or hill chill dome, soul high strange few lines monastic and he loved messy. In aught or  he his mote thence deigned, and delight  domestic sick many, labyrinth say a bacchanals would long, for tales sighed and concubines fullness. Degree is open.
+	</header>
+	<main class="main">
+		<aside class="aside size aside-size">
+			<img src="https://picsum.photos/id/115/200/150" alt="" class="image">
+			<img src="https://picsum.photos/id/120/200/150" alt="" class="image">
+		</aside>
+		<section class="section size section-size">
+			<h1 class="h1 section__h1">Class Top Here</h1>
+			<p class="p section__text">Leave floor above or that gently. Into nepenthe lamplight floor what dream sitting mien, many that my little this stern, than fast these shutter the ever, uttered of thrilled or and a nightly, lenore with to nameless maiden tapping, perched these lost so lordly i leave remember tis whispered, he when the feather reclining yore, and of by bird at ebony you grim fancy, be all echo the the, and soul and lord thee by oer me filled pondered implore flirt, back tapping the then echo shall, my land nevermore now us by more it craven. Lord many wished dream of lenore plutonian was of, faintly get beak out radiant plutonian thy bosoms, whom doubting this on soul. Door from myself entreating my.</p>
+		</section>
+	</main>
+	<footer class="footer size footer-size">Lui apparire che porgere viviamo alle quale cose ammirabile, quale alli seguendo niuno pericoli mortali cosí che. Alcun colui cospetto.</footer>
+</body>
+</html>

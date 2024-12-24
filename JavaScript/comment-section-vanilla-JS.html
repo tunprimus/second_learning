@@ -1,0 +1,135 @@
+<!-- Modified from How to Create a Comment Section Using HTML and Vanilla JavaScript? https://javascript.plainenglish.io/how-to-create-a-comment-section-using-html-and-vanilla-js-aa6b6a53b9cf -->
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>How to Create a Comment Section Using HTML and Vanilla JavaScript?</title>
+</head>
+<body class="body">
+	<header class="header"></header>
+	<main class="main">
+		<section class="section comments-container">
+			<label for="new_comment" name="new_comment" class="label textarea-label comments-container__label">Add your comment below:</label>
+			<br>
+			<textarea name="new_comment" id="new_comment" class="comments-container__textarea textarea textarea--new-comment"></textarea>
+			<button class="button add-comments comments-container__button" id="add_comments">Add Comment</button>
+			<div id="all_comments" class="all-comments comments-container__all-comments">
+				<!-- <div class="comments-wrapper" id="comments_wrapper" hidden></div> -->
+			</div>
+		</section>
+	</main>
+	<footer class="footer"></footer>
+
+	<!-- JavaScript Here -->
+	<script>
+		window.onload = function setTemplate() {
+			document.getElementById('all_comments').innerHTML = localStorage.getItem('template');
+		};
+		// Variables
+		const commentContainer = document.getElementById('all_comments');
+		const addCommentsBtn = document.getElementById('add_comments');
+
+		// Event Listeners
+		addCommentsBtn.addEventListener('click', function (evt) {
+			addComment(evt);
+		});
+		commentContainer.addEventListener('click', function (evt) {
+			processComments(evt);
+		})
+
+		//
+		// Functions
+		//
+
+		/**
+		 * Checks if an element has a class.
+		 * @param {Element} element - The element to check.
+		 * @param {string} className - The class name to check.
+		 * @returns {boolean} True if the element has the class; false otherwise.
+		 */
+		function hasClass(element, className) {
+			return element.classList.contains(className);
+		}
+
+		/**
+		 * Saves the current state of the comments section to local storage.
+		 */
+		function setOnLocalStorage() {
+			localStorage.setItem('template', document.getElementById('all_comments').innerHTML);
+		}
+
+		/**
+		 * Creates a new comment based on the content of the text box or reply box,
+		 * and adds it to the page. If the event target is the add button, creates a
+		 * new comment at the top level. If the event target is a reply button, adds
+		 * a new comment below the reply button. The new comment is added to local
+		 * storage, and the page is updated to reflect the new comment.
+		 * @param {Event} evt - The event object passed by the event listener.
+		 */
+		function addComment(evt) {
+			let commentText;
+			let wrapperDiv;
+			const textBox = document.createElement('div');
+			const replyButton = document.createElement('button');
+			replyButton.classList.add('button', 'reply-comment', 'button--reply');
+			replyButton.textContent = 'Reply';
+			const likeButton = document.createElement('button');
+			likeButton.classList.add('button', 'like-comment', 'button--like');
+			likeButton.textContent = 'Like';
+			const deleteButton = document.createElement('button');
+			deleteButton.classList.add('button', 'delete-comment', 'button--delete');
+			deleteButton.textContent = 'Delete';
+			if (hasClass(evt.target.parentElement, 'comments-container')) {
+				const wrapperDiv = document.createElement('div');
+				wrapperDiv.classList.add('comments-wrapper');
+				wrapperDiv.style.marginLeft = 0;
+				commentText = document.getElementById('new_comment').value;
+				document.getElementById('new_comment').value = '';
+				textBox.textContent = commentText;
+				textBox.style.backgroundColor = "cornflowerblue";
+				wrapperDiv.appendChild(textBox, replyButton, likeButton, deleteButton);
+				commentContainer.appendChild(wrapperDiv);
+			} else {
+				wrapperDiv = evt.target.parentElement;
+				commentText = evt.target.parentElement.firstElementChild.value;
+				textBox.textContent = commentText;
+				textBox.style.backgroundColor = "paleturquoise";
+				wrapperDiv.innerHTML = '';
+				wrapperDiv.appendChild(textBox, replyButton, likeButton, deleteButton);
+			}
+			setOnLocalStorage();
+		}
+
+		function processComments(evt) {
+			if (hasClass(evt.target, 'reply-comment')) {
+				const parentDiv = evt.target.parentElement;
+				const wrapperDiv = document.createElement('div');
+				wrapperDiv.style.marginLeft = (Number.parseInt(parentDiv.style.marginLeft) + 15).toString() + 'px';
+				wrapperDiv.classList.add('comments-wrapper');
+				const textArea = document.createElement('textarea');
+				textArea.style.marginRight = '20px';
+				const addButton = document.createElement('button');
+				addButton.classList.add('button', 'add-reply', 'button--add-reply');
+				addButton.textContent = 'Add';
+				const cancelButton = document.createElement('button');
+				cancelButton.classList.add('button', 'cancel-reply', 'button--cancel-reply');
+				cancelButton.textContent = 'Cancel';
+				wrapperDiv.appendChild(textArea, addButton, cancelButton);
+				parentDiv.appendChild(wrapperDiv);
+			} else if (hasClass(evt.target, 'add-reply')) {
+				addComment(evt);
+			} else if (hasClass(evt.target, 'like-comment')) {
+				const likeBtnValue = evt.target.innerHTML;
+				evt.target.innerHTML = likeBtnValue !== 'Like' ? Number.parseInt(likeBtnValue) + 1 : 1;
+				setOnLocalStorage();
+			} else if (hasClass(evt.target, 'cancel-reply')) {
+				evt.target.parentElement.innerHTML = '';
+				setOnLocalStorage();
+			} else if (hasClass(evt.target, 'delete-comment')) {
+				evt.target.parentElement.remove();
+			}
+		}
+	</script>
+</body>
+</html>

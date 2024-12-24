@@ -1,0 +1,142 @@
+<!-- Modified from How to create a vanilla JS search page for a static website https://gomakethings.com/how-to-create-a-vanilla-js-search-page-for-a-static-website/ -->
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>How to create a vanilla JS search page for a static website</title>
+</head>
+<body class="body">
+	<header class="header"></header>
+	<main class="main">
+		<section class="section form-section">
+			<form action="https://duckduckgo.com/" method="get" id="form_search" class="form form-search">
+				<label for="input_search" class="label label-search">Enter your search criteria:</label>
+				<input type="text" name="question" id="input_search" class="input input-search input-search--question">
+				<!-- Use your site name to restrict the search to a specific domain -->
+				<input type="hidden" name="sites" value="your-domain.com" class="input input-search input-search--sites">
+				<button type="submit" id="submit_search" class="button button-search">Search</button>
+			</form>
+		</section>
+		<section class="section result-section">
+			<div id="search_results" class="search-results"></div>
+		</section>
+	</main>
+	<footer class="footer"></footer>
+
+	<!-- JavaScript Here -->
+	<script>
+		let searchIndex = [
+			{
+				title: "My awesome article",
+				date: "December 18, 2018",
+				url: "https://gomakethings.com/my-awesome-article",
+				content: "The full text of the content...",
+				summary: "A short summary or preview of the content (can also be a clipped version of the first few sentences)..."
+			},
+			// More content...
+		];
+
+		// Creating a vanilla JS search feature
+		(function (window, document, undefined) {
+			'use strict';
+			//
+			// Variables
+			//
+			let form = document.querySelector('#form_search');
+			let searchInput = document.querySelector('#input_search');
+			let submitButton = document.querySelector('#submit_search');
+			let resultList = document.querySelector('#search_results');
+
+			//
+			// Methods
+			//
+
+			/**
+			 * Create the HTML for each result
+			 * @param {object} article - The article
+			 * @param {number} id - The result index
+			 * @return {string} - HTML markup
+			 */
+			let createHTML = function (article, id) {
+				let html = '<div class="search-result" id="search_result_' + id + '">' + '<a class="anchor result-anchor" href="' + article.url + '">' + '<aside class="aside search-result-aside">' + article.date + '</aside>' + '<h2 class="h2 result-h2">' + article.title + '</h2>' + article.summary.slice(0, 150) + '...<br>' + article.url + '</a>' + '</div>';
+				return html;
+			};
+
+			/**
+			 * Create the markup when no results are found
+			 * @return {string} - HTML string
+			 */
+			let createNoResultsHTML = function () {
+				return `
+					<h2>Sorry, no results found.</h2>
+					<p>Try searching for something else.</p>
+				`;
+			};
+
+			/**
+			 * Create the markup when results are found
+			 * @param {array} results - An array of search results
+			 * @return {string} - HTML string
+			 */
+			let createResultsHTML = function (results) {
+				let html = '<p>Found ' + results.length + ' matching articles</p>';
+				html += results.map(function (article, index) {
+					return createHTML(article, index);
+				}).join('');
+				return html;
+			};
+
+			/**
+			 * Search for matches
+			 * @param {string} query - The search query
+			 * @return {array} - An array of search results
+			 */
+			let search = function (query) {
+				// Variables
+				let reg = new RegExp(query, 'gi');
+				let priority01 = [];
+				let priority02 = [];
+
+				// Search the content
+				searchIndex.forEach(function (article) {
+					if (reg.test(article.title)) {
+						return priority01.push(article);
+					}
+					if (reg.test(article.content)) {
+						return priority02.push(article);
+					}
+				});
+				// Combine the results into a single array
+				let results = [].concat(priority01, priority02);
+
+				// Output the results
+				resultList.innerHTML = results.length < 1 ? createNoResultsHTML() : createResultsHTML(results);
+			};
+
+			/**
+			 * Handle submit events
+			 */
+			let submitHandler = function (evt) {
+				evt.preventDefault();
+				search(searchInput.value);
+			};
+
+			//
+			// Inits & Event Listeners
+			//
+
+			// Make sure required content exists
+			if (!form || !searchInput || !resultList || !searchIndex) {
+				return;
+			}
+
+			// Create a submit handler
+			form.addEventListener('submit', submitHandler);
+
+
+		})(window, document);
+	</script>
+</body>
+</html>
+

@@ -1,12 +1,8 @@
-import {Login} from './js/login.js';
+//@ts-check
+'use strict';
 
-// Create a variable for the login form
-const form = document.querySelectorAll('#login_form')[0];
+const auth = new Auth();
 
-// If the form exists, run the class
-if (form) {
-	// Setup the fields we want to validate, we only have two but you can add others
-	const fields = ['username', 'password'];
-	// Run the class
-	const validator = new Login(form, fields);
-}
+document.querySelector('.logout').addEventListener('click', function (evt) {
+	auth.logOut();
+});

@@ -7,13 +7,14 @@
 	<title>Login</title>
 	<link rel="stylesheet" href="./css/style.css">
 	<script defer src="./js/login.js"></script>
+	<script defer src="./init.js"></script>
 </head>
 <body class="body login">
 	<header class="header"></header>
 	<main class="main container">
 		<h2 class="h2 text-centre">Login</h2>
 		<br>
-		<form action="/dashboard.html" class="form login-form">
+		<form action="/dashboard.html" class="form login-form" id="login_form">
 			<fieldset class="fieldset input-group">
 				<label for="username" class="label">Username</label>
 				<input type="text" id="username" class="input input-username" required>

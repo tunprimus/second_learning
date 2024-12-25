@@ -3,7 +3,7 @@
 
 const MIN_PASSWORD_LENGTH = 12;
 
-class Login {
+export class Login {
 	constructor(form, fields) {
 		this.form = form;
 		this.fields = fields;

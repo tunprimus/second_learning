@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Calculate Reading Time</title>
+	<style>
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+		}
+
+		.body {
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+		}
+
+		.h1 {
+			font-size: 1.3rem;
+		}
+
+		.h2 {
+			font-size: 1.2rem;
+			font-weight: bold;
+		}
+
+		.body > .header {
+			margin: 0.3125rem;
+			padding: 0;
+			height: 4rem;
+			font-weight: 700;
+			box-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.1);
+		}
+
+		.home {
+			display: block;
+			padding: 0.25rem 0.5rem;
+			font-size: 2rem;
+		}
+
+		.main {
+			margin: auto 1.25rem;
+		}
+
+		.post__header {
+			display: grid;
+			grid-template-columns: auto 1fr;
+			grid-template-rows: auto 1.875rem auto auto;
+			grid-gap: 0.625rem;
+			align-items: center;
+			width: 100%;
+		}
+
+		.headline {
+			grid-column: 1 / -1;
+			font-size: 2.25rem;
+			line-height: 1.25;
+		}
+
+		.author {
+			grid-row: 3;
+		}
+
+		.author-img {
+			width: 2.813rem;
+			height: 2.813rem;
+			border-radius: 50%;
+		}
+
+		.sharing {
+			grid-column: 2 / -1;
+			justify-self: end;
+		}
+
+		.social__icon {
+			grid-column: 2;
+			grid-row: 2;
+			padding-right: 0.625rem;
+			font-size: 1.5rem;
+		}
+
+		.publish-date {
+			justify-self: end;
+		}
+
+		.reading-time {
+			position: relative;
+			display: inline-block;
+			grid-column: 1 / -1;
+			cursor: pointer;
+		}
+
+		.reading-time__details {
+			position: absolute;
+			background-color: white;
+			z-index: 1;
+		}
+
+		.reading-time__summary {
+			background-color: purple;
+			color: white;
+			font-weight: 600;
+		}
+
+		.article__image {
+			display: block;
+			width: 100%;
+			margin-top: 1.875rem;
+		}
+	</style>
+</head>
+<body class="body">
+	<!-- Header -->
+	<header class="header"><a href="/" class="anchor home"><icon class="web-component icon" alt="book icon">< /></icon></a></header>
+
+	<!-- Main -->
+	<main id="content" class="main content">
+		<article id="post" class="article post">
+			<header class="header post__header">
+				<h1 class="h1 headline">I became a zen buddhist</h1>
+				<svg class="author-img"></svg>
+				<span class="span author">Rob O´Leary</span>
+				<div class="sharing"></div>
+				<span class="span publish-date">16 Dec. 2024</span>
+				<div class="reading-time header__reading-time">
+					<details class="details reading-time__details">
+						<summary class="summary reading-time__summary">1 min read</summary>
+						<span class="span reading-time__span"></span>
+					</details>
+				</div>
+			</header>
+			<img src="data:image/png;base64,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" alt="caricature waves" class="article__image">
+			<p class="p article__text">Had times more congealed a chill fountain bliss honeyed sorrow, a longdeserted hill perchance left to one his though. Domestic said however monastic ne memory in whom carnal of. For the thy his had that did mote been bower. And longed that and and, found to than bower yet not deadly youth sadness could, chill from that in not none, but he of to fellow childe parasites, though adversity and sea happy nor mothernot, tis him for delphis drop albions dear. For he him he pollution the passed. His the disappointed been will vexed nine dwelt eremites. Had the ear.</p>
+			<p class="p article__text">Sí il di per forse noi quale ci dallo maesta divina. Ci viviamo se allo ignoranza piú tutte. Piene quale quella piene di d'angoscia. Fuor credere nostro che quale fa, piú fermi non gli beato, e divenuti cospetto da nella, beati son ingannati nel come fa a e non. Primo niuno e si la mortali avvedimento e. Alcun cosa potendo sogiacere quale degli e da. Di ancora credere pregator dio son cosa quale e fermi, per reputiamo noi alli la donne quegli di. Siamo son delle di ciascheduna. Da nondimeno fermi purita non avvien, al quel prestasse io senza manifesta io cosa quale prieghi. Siamo di tal noi e quali non. Forse in come tutte maravigliose in manifesta né tutte.</p>
+			<p class="p article__text">Violet me had thy the nothing surely the doubting nevermore, and i for both betook volume. Still and smiling meant have nepenthe, upon that if out answer, violet just help no the and some dying, for silken of some came air at to, fiery and my leave rare raven the. From velvet word stock muttered napping back dreaming, whom oer of desert lining explore clasp croaking. Darkness at this lenore the the felt. Unmerciful hopes this the i friends nevermore. That have nevermore shore fantastic before a there thy, not word wore door lost horror stillness pallid of. A beating each the lost purple thereis i, that pondered chamber stood my. Heard by a muttered before token, in as fearing let but yore yore the lenore. Then of as on sir so the take. Word and that his bends little. Of so burning back its divining volume the. I and his heaven eagerly stepped borrow stayed, raven than then entrance window that, of my other this stronger still, entreating by scarcely this eyes the that is his. My nevermore suddenly silken though air, plainly that some uncertain sorrowsorrow the is nevermore bust. The thy devil nevermore wore radiant i my.</p>
+			<p class="p article__text">Ci viviamo se allo ignoranza piú tutte. Piene quale quella piene di d'angoscia. Fuor credere nostro che quale fa, piú fermi non gli beato, e divenuti cospetto da nella, beati son ingannati nel come fa a e non. Primo niuno e si la mortali avvedimento e. Mí il di per forse noi quale ci dallo maesta divina. Alcun cosa potendo sogiacere quale degli e da. Di ancora credere pregator dio son cosa quale e fermi, per reputiamo noi alli la donne quegli di. Siamo son delle di ciascheduna. Da nondimeno fermi purita non avvien, al quel prestasse io senza manifesta io cosa quale prieghi. Siamo di tal noi e quali non. Forse in come tutte maravigliose in manifesta né tutte.</p>
+			<p class="p article__text">His the disappointed been will vexed nine dwelt eremites. Had the ear. Had times more congealed a chill fountain bliss honeyed sorrow, a longdeserted hill perchance left to one his though. Domestic said however monastic ne memory in whom carnal of. For the thy his had that did mote been bower. And longed that and and, found to than bower yet not deadly youth sadness could, chill from that in not none, but he of to fellow childe parasites, though adversity and sea happy nor mothernot, tis him for delphis drop albions dear. For he him he pollution the passed.</p>
+			<p class="p article__text">Loathed mine deemed loathed yea but all been. Whose tales loved in of adieu sadness, made can to bower land love could ofttimes albions. That made was yes of, in by to ever and. This soils care revel only left uses in would birth, of alone true adieu native strange his parasites. Day caught carnal oh childe yet a. Where ear were fulness to and land resolved it. Nor had loathed fall aisle might the coffined in, mote to in nor could in labyrinth, might they heart steel counsel olden eremites, delight of and atonement was lyres parasites. In maddest who saw to hall, go breast kiss at mothernot he know passion revellers, pleasure counsel though seraphs sadness favour of where sun. The mine chaste only paphian, night mother not by albions not feere when. Taste suits rill delight from he sorrow times. Saw from breast  visit dwell. With deem her flow open was to mirth, third be was not favour. Uses it ways to reverie might the his. Pangs deem times love where festal heavenly and, day glorious talethis a joyless only glare, had bidding was it the her paphian pomp sore. Goodly consecrate in chaste sighed thou atonement harold in not, into he it disappointed on disporting but, perchance knew he more and might him men. Venerable degree plain venerable and heavenly ah. At tear the lyres within the to nor the low. Had than land and grief native a lines. In of and oft along. Scape night or pile drugged his his. His love could her ere. Vast from festal yes flaunting lone sister smile befell but. When by visit from longed he that memory uses a. Sullen deemed in lemans and steel, caught pile loved long a amiss sick would nor chaste, was whose was his if was like his. Fondly tis spoiled wandered talethis  loathed ere. Can sea long in in evil charms mirthful, not tis known heart in wrong sore, een heart seek shrine given such loved been the, amiss one of grief scene ear sight beyond. Awake waste spent had with she but and. Lowly sore befell his olden, given steel calm he thee and fame, bade old calm he many loathed, love was of chaste yet and a weary, aye will to ofttimes below sighed finds of vile. Be eros had are sea hellas wandered yet to. Cell he fabled.</p>
+		</article>
+	</main>
+
+	<!-- Footer -->
+	<footer class="footer">
+		<!-- http://billpatrianakos.me/blog/2014/12/31/a-better-way-to-display-the-current-year-i -->
+		<p class="footer__copyright">&copy; Copyright 2024<script type="text/javascript">new Date().getFullYear() > 2024 && document.write("-" + new Date().getFullYear()); </script>, Tunprimus.</p>
+	</footer>
+
+	<!-- JavaScript Here -->
+	<script>
+		const post = document.getElementById("post");
+		const readingTimeSummary = document.querySelector(".reading-time__summary");
+		const readingTimeDetails = document.querySelector(".reading-time__span");
+		const AVG_WORDS_PER_MIN = 250;
+
+		setReadingTime();
+
+		function setReadingTime() {
+			let count = getWordCount();
+			let readTime = Math.ceil(count / AVG_WORDS_PER_MIN);
+
+			readingTimeSummary.textContent = readTime + " min read";
+			readingTimeDetails.textContent = count + " words read at " + AVG_WORDS_PER_MIN + " words per minute.";
+		}
+
+		function getWordCount() {
+			// Counts only words from Latin alphabets
+			// return post.innerText.match(/\w+/g).length;
+			// Counts words of almost any language
+			return post.innerText.match(/[\p{Letter}\p{Number}]+/giu).length;
+		}
+	</script>
+</body>
+</html>

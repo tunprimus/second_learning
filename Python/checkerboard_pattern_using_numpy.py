@@ -30,6 +30,16 @@ test_num01 = 8
 print_checkerboard01(test_num01)
 
 def print_checkerboard02(num):
+    """
+    Prints a checkerboard pattern of size num x num.
+
+    Args:
+        num (int): The size of the checkerboard pattern.
+
+    The function generates a two-dimensional numpy array of zeros
+    and fills it with ones in alternating positions to create the
+    checkerboard pattern. It then prints each row of the pattern.
+    """
     final = []
     for i in range(num):
         final.append((list(np.tile([0, 1], int(num / 2)))) if i % 2 == 0 else list(np.tile([1, 0], int(num / 2))))

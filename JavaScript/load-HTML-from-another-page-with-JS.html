@@ -1,0 +1,48 @@
+<!-- Adapted from gomakethings.com -->
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>How to Load HTML from Another Page with Vanilla JavaScript</title>
+</head>
+<body>
+	<a href="/terms" class="anchor">Read the Terms of Services</a>
+	<!-- JavaScript Here -->
+	<script>
+		// Convert link to button
+		let toggle = document.querySelectorAll('[href="/terms"]')[0];
+		toggle.setAttribute('role', 'button');
+		toggle.addEventListener('click', handleModal);
+		// Fetch whole html page
+		fetch('/about').then(function (response) {
+			if (response.ok) {
+				return response.text();
+			}
+			throw response;
+		}).then(function (text) {
+			console.log(text);
+			let dialog = document.querySelectorAll('dialog')[0];
+			dialog.innerHTML = text;
+		})
+		// Function to convert string to HTML
+		function stringToHtml(text) {
+			let parser = new DOMParser();
+			let doc = parser.parseFromString(text, 'text/html');
+			return doc.body;
+		}
+		// Fetch portions of html page
+		fetch('/about').then(function (response) {
+			if (response.ok) {
+				return response.text();
+			}
+			throw response;
+		}).then(function (text) {
+			let html = stringToHtml(text);
+			let content = html.querySelectorAll('#agreement')[0];
+			let dialog = document.querySelectorAll('dialog')[0];
+			dialog.append(content);
+		})
+	</script>
+</body>
+</html>

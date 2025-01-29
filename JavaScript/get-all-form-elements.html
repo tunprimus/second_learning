@@ -1,0 +1,80 @@
+<!-- Adapted from gomakethings.com -->
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Getting All Elements in a Form with Vanilla JavaScript</title>
+	<style>
+		.form {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.form > * {
+			max-width: 75vw;
+		}
+	</style>
+</head>
+<body>
+	<form action="" class="form" id="my_form">
+		<!-- Name input field -->
+		<label for="name" class="form-label">Name</label>
+		<input type="text" class="form-input" id="name">
+		<!-- Address input field -->
+		<label for="address" class="form-label">Address</label>
+		<input type="text" class="form-input" id="address">
+		<!-- Email input field -->
+		<label for="email" class="form-label">Email</label>
+		<input type="email" class="form-input" id="email">
+		<!-- Select option field -->
+		<label for="hear_about_us" class="form-label">How did you hear about us?</label>
+		<select name="hear_about_us" id="hear_about_us" class="select">
+			<option value="" class="option select__option"></option>
+			<option value="google" class="option select__option">Google</option>
+			<option value="referral" class="option select__option">Referral</option>
+			<option value="tv" class="option select__option">A TV Ad</option>
+			<option value="radio" class="option select__option">A Radio Ad</option>
+		</select>
+		<!-- Additional info textarea field -->
+		<label for="more" class="form-label">Additional thoughts?</label>
+		<textarea name="more" id="more" class="textarea"></textarea>
+		<!-- Terms of service field -->
+		<p class="p terms-of-service"><strong>Do you agree to our terms of service?</strong></p>
+		<!-- Radio input -->
+		<label for="" class="label">
+			<input type="radio" name="tos" id="" value="yes"> Yes
+		</label>
+		<!-- Radio input -->
+		<label for="" class="label">
+			<input type="radio" name="tos" id="" value="yes"> No
+		</label>
+		<!-- Superheroes field -->
+		<p class="p terms-of-service"><strong>Pick your favourite superheroes</strong></p>
+		<!-- Checkbox input -->
+		<label for="" class="label">
+			<input type="checkbox" name="spiderman"> Spiderman
+		</label>
+		<!-- Checkbox input -->
+		<label for="" class="label">
+			<input type="checkbox" name="wonderwoman"> Wonder Woman
+		</label>
+		<!-- Checkbox input -->
+		<label for="" class="label">
+			<input type="checkbox" name="blackpanther"> Black Panther
+		</label>
+		<!-- Submit -->
+		<p><button class="button" type="submit">Submit</button></p>
+	</form>
+	<!-- JavaScript Here -->
+	<script>
+		let form = document.querySelectorAll('#my_form')[0];
+		// console.log(form);
+		let elements = form.elements;
+		let elemsArr01 = Array.from(elements);
+		// console.log(elemsArr01);
+		let elemsArr02 = Array.prototype.slice.call(elements);
+		console.log(elemsArr02);
+	</script>
+</body>
+</html>

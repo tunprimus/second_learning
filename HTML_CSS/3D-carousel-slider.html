@@ -4,23 +4,192 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>3D Carousel Slider with Only HTML and CSS</title>
-	<style></style>
+	<style>
+		.body {
+			margin: 0;
+			height: 37.5rem;
+			display: grid;
+			grid-template-rows: 31.25rem 6.25rem;
+			grid-template-columns: 1fr 1.875rem 1.875rem 1.875rem 1.875rem 1.875rem 1fr;
+			justify-items: center;
+			align-items: center;
+			background-color: #8C52FF;
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+		}
+
+		.emoticon {
+			font-size: 3.125rem;
+			font-size: 6.25rem;
+			margin-top: 0.938rem;
+			text-align: center;
+			vertical-align: middle;
+		}
+
+		.xitem__img {
+			width: 6.25rem;
+			height: 6.25rem;
+			object-fit: cover;
+			border-radius: 50%;
+			margin-top: 0.938rem;
+		}
+
+		.name {
+			margin-top: 0.125rem;
+			color: #8C52FF;
+		}
+
+		.occupation {
+			margin-top: 0.125rem;
+			font-style: italic;
+		}
+
+		.carousel {
+			grid-row: 1 / 2;
+			grid-column: 1 / 8;
+			width: 100vw;
+			height: 18.75rem;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			overflow: hidden;
+			transform-style: preserve-3d;
+			perspective: 37.5rem;
+			--items: 5;
+			--middle: 3;
+			--position: 1;
+			pointer-events: none;
+		}
+
+		.item {
+			width: 18.75rem;
+			height: 15.63rem;
+			position: absolute;
+			padding: 1.25rem;
+			background-color: #FFFFFF;
+			border: 0.1875rem solid black;
+			border-radius: 1.25rem;
+			text-align: center;
+			--r: calc(var(var(--position) - var(--offset)));
+			--abs: max(calc(var(--r) * -1), var(--r));
+			transition: all 0.25s linear;
+			transform: rotateY(calc(-10deg * var(--r))) translateX(calc(-300px * var(--r)));
+			z-index: calc((var(--position) - var(--abs)));
+		}
+
+		.item:nth-of-type(1) {
+			--offset: 1;
+		}
+
+		.item:nth-of-type(2) {
+			--offset: 2;
+		}
+
+		.item:nth-of-type(3) {
+			--offset: 3;
+		}
+
+		.item:nth-of-type(4) {
+			--offset: 4;
+		}
+
+		.item:nth-of-type(5) {
+			--offset: 5;
+		}
+
+		.input:nth-of-type(1) {
+			grid-column: 2 / 3;
+			grid-row: 2 / 3;
+		}
+
+		.input:nth-of-type(1):checked ~ .carousel {
+			--position: 1;
+		}
+
+		.input:nth-of-type(2) {
+			grid-column: 3 / 4;
+			grid-row: 2 / 3;
+		}
+
+		.input:nth-of-type(2):checked ~ .carousel {
+			--position: 2;
+		}
+
+		.input:nth-of-type(3) {
+			grid-column: 4 / 5;
+			grid-row: 2 / 3;
+		}
+
+		.input:nth-of-type(3):checked ~ .carousel {
+			--position: 3;
+		}
+
+		.input:nth-of-type(4) {
+			grid-column: 5 / 6;
+			grid-row: 2 / 3;
+		}
+
+		.input:nth-of-type(4):checked ~ .carousel {
+			--position: 4;
+		}
+
+		.input:nth-of-type(5) {
+			grid-column: 6 / 7;
+			grid-row: 2 / 3;
+		}
+
+		.input:nth-of-type(5):checked ~ .carousel {
+			--position: 5;
+		}
+	</style>
 </head>
-<body>
+<body class="body">
 	<header class="header">
-		<input type="radio" name="position" id="" class="">
-		<input type="radio" name="position" id="" class="">
-		<input type="radio" name="position" id="" class="">
-		<input type="radio" name="position" id="" class="">
-		<input type="radio" name="position" id="" class="">
+		<input type="radio" name="position" id="" class="input input-radio header__input">
+		<input type="radio" name="position" id="" class="input input-radio header__input">
+		<input type="radio" name="position" id="" class="input input-radio header__input" checked>
+		<input type="radio" name="position" id="" class="input input-radio header__input">
+		<input type="radio" name="position" id="" class="input input-radio header__input">
 	</header>
-	<main class="main" id="carousel">
+	<main class="main carousel" id="carousel">
 		<!-- Card Item 01 -->
 		<div class="item card-item">
-			<img src="" alt="" class="img">
-			<h3 class="h3 name"></h3>
-			<p class="p occupation"></p>
-			<p class="p testimonial"></p>
+			<span class="emoticon card-item__emoticon emoticon-old-man">&#x1F474;</span>
+			<img src="" alt="" class="img item__img">
+			<h3 class="h3 name">Steve Sharpe</h3>
+			<p class="p occupation">Marketing Admin</p>
+			<p class="p testimonial">Go deemed call where that neer none did beyond near, sore when not and. The artless harold not rake.</p>
+		</div>
+		<!-- Card Item 02 -->
+		<div class="item card-item">
+			<span class="emoticon card-item__emoticon emoticon-curly-hair-woman">&#x1F469;</span>
+			<img src="" alt="" class="img item__img">
+			<h3 class="h3 name">Sally John</h3>
+			<p class="p occupation">Cybersecurity Engineer</p>
+			<p class="p testimonial">Thinking soul morrow lamplight thy grim farther little. Thy and tapping is cushions have seat. Its at a is by.</p>
+		</div>
+		<!-- Card Item 03 -->
+		<div class="item card-item">
+			<span class="emoticon card-item__emoticon emoticon-red-hair-man">&#x1F468;</span>
+			<img src="" alt="" class="img item__img">
+			<h3 class="h3 name">Michael Smith</h3>
+			<p class="p occupation">Software Engineer</p>
+			<p class="p testimonial">Was true pomp that nor did chaste near seraphs. He grace adieu adversity me. Goodly some for had strange. By.</p>
+		</div>
+		<!-- Card Item 04 -->
+		<div class="item card-item">
+			<span class="emoticon card-item__emoticon emoticon-blond-hair-woman">&#x1F471;</span>
+			<img src="" alt="" class="img item__img">
+			<h3 class="h3 name">Eve Smith</h3>
+			<p class="p occupation">UI/UX Designer</p>
+			<p class="p testimonial">Crest the hath its from with before said by lordly. Denser weary heart syllable with. As tell thy flown on.</p>
+		</div>
+		<!-- Card Item 05 -->
+		<div class="item card-item">
+			<span class="emoticon card-item__emoticon emoticon-person-bouncing-ball">&#x26F9;</span>
+			<img src="" alt="" class="img item__img">
+			<h3 class="h3 name">Luke Maxwell</h3>
+			<p class="p occupation">System Architect</p>
+			<p class="p testimonial">Straight sad still name sculptured his this. Decorum scarcely tis as ebony. Stepped of thereat and it door, my my.</p>
 		</div>
 	</main>
 </body>

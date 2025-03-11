@@ -47,6 +47,7 @@ class PacketProcessor:
         self.start_time = datetime.now()
         self.packet_count = 0
         self.lock = threading.Lock()
+        self.logfile_destination = realpath("./network_traffic.log")
 
     def get_protocol_name(self, protocol_num):
         """Convert protocol number to name"""
@@ -80,6 +81,8 @@ class PacketProcessor:
                         })
                     self.packet_data.append(packet_info)
                     self.packet_count += 1
+                    # Write log to disc
+                    logging.FileHandler(self.logfile_destination)
                     # Keep only last 10000 packets to prevent memory issues
                     if len(self.packet_data) > 10_000:
                         self.packet_data.pop(0)

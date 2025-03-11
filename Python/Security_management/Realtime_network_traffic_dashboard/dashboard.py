@@ -29,6 +29,7 @@ logger = logging.getLogger(__name__)
 
 # Packet Processor
 
+
 class PacketProcessor:
     """Process and analyse network packets"""
 
@@ -64,21 +65,27 @@ class PacketProcessor:
                         "destination": packet[IP].dst,
                         "protocol": self.get_protocol_name(packet[IP].proto),
                         "size": len(packet),
-                        "time_relative": (datetime.now() - self.start_time).total_seconds(),
+                        "time_relative": (
+                            datetime.now() - self.start_time
+                        ).total_seconds(),
                     }
                     # Add TCP-specific information
                     if TCP in packet:
-                        packet_info.update({
-                            "src_port": packet[TCP].sport,
-                            "dst_port": packet[TCP].dport,
-                            "tcp_flags": packet[TCP].flags,
-                        })
+                        packet_info.update(
+                            {
+                                "src_port": packet[TCP].sport,
+                                "dst_port": packet[TCP].dport,
+                                "tcp_flags": packet[TCP].flags,
+                            }
+                        )
                     # Add UDP-specific information
                     elif UDP in packet:
-                        packet_info.update({
-                            "src_port": packet[UDP].sport,
-                            "dst_port": packet[UDP].dport,
-                        })
+                        packet_info.update(
+                            {
+                                "src_port": packet[UDP].sport,
+                                "dst_port": packet[UDP].dport,
+                            }
+                        )
                     self.packet_data.append(packet_info)
                     self.packet_count += 1
                     # Write log to disc
@@ -101,18 +108,26 @@ def create_visualisation(df):
     if len(df) > 0:
         # Protocol distribution
         protocol_counts = df["protocol"].value_counts()
-        fig_protocol = px.pie(values=protocol_counts.values, names=protocol_counts.index, title="Protocol Distribution")
+        fig_protocol = px.pie(
+            values=protocol_counts.values,
+            names=protocol_counts.index,
+            title="Protocol Distribution",
+        )
         st.plotly_chart(fig_protocol, use_container_width=True)
 
         # Packets timeline
         df["timestamp"] = pd.to_datetime(df["timestamp"])
         df_grouped = df.groupby(df["timestamp"].dt.floor("S")).size()
-        fig_timeline = px.line(x=df_grouped.index, y=df_grouped.values, title="Packets per Second")
+        fig_timeline = px.line(
+            x=df_grouped.index, y=df_grouped.values, title="Packets per Second"
+        )
         st.plotly_chart(fig_timeline, use_container_width=True)
 
         # Top source IPs
         top_sources = df["source"].value_counts().head(RANDOM_SAMPLE_SIZE)
-        fig_sources = px.bar(x=top_sources.index, y=top_sources.values, title="Top Source IP Addresses")
+        fig_sources = px.bar(
+            x=top_sources.index, y=top_sources.values, title="Top Source IP Addresses"
+        )
         st.plotly_chart(fig_sources, use_container_width=True)
 
 
@@ -120,8 +135,10 @@ def create_visualisation(df):
 def start_packet_capture():
     """Start packet capture in a separate thread"""
     processor = PacketProcessor()
+
     def capture_packets():
         sniff(prn=processor.process_packet, store=False)
+
     capture_thread = threading.Thread(target=capture_packets, daemon=True)
     capture_thread.start()
     return processor
@@ -151,7 +168,12 @@ def main():
     # Display recent packets
     st.subheader("Recent Packets")
     if len(df) > 0:
-        st.dataframe(df.tail(RANDOM_SAMPLE_SIZE)[["timestamp", "source", "destination", "protocol", "size"]], use_container_width=True)
+        st.dataframe(
+            df.tail(RANDOM_SAMPLE_SIZE)[
+                ["timestamp", "source", "destination", "protocol", "size"]
+            ],
+            use_container_width=True,
+        )
     # Add refresh button
     if st.button("Refresh Data"):
         st.rerun()
@@ -162,4 +184,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

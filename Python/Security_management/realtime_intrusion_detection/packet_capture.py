@@ -12,7 +12,7 @@ class PacketCapture:
         self.stop_capture = threading.Event()
 
     def packet_callback(self, packet):
-        if IP in packet and TCP in packet:
+        if (IP in packet) and (TCP in packet):
             self.packet_queue.put(packet)
 
     def start_capture(self, interface="eth0"):
@@ -25,7 +25,7 @@ class PacketCapture:
             )
 
         self.capture_thread = threading.Thread(target=capture_thread)
-        capture_thread.start()
+        self.capture_thread.start()
 
     def stop(self):
         self.stop_capture.set()
@@ -39,17 +39,18 @@ class TrafficAnalyser:
             "packet_count": 0,
             "byte_count": 0,
             "start_time": None,
-            "last_time": None
+            "last_time": None,
         })
 
     def analyse_packet(self, packet):
-        if IP in packet and TCP in packet:
+        if (IP in packet) and (TCP in packet):
             ip_src = packet[IP].src
             ip_dst = packet[IP].dst
             port_src = packet[TCP].sport
             port_dst = packet[TCP].dport
 
             flow_key = (ip_src, ip_dst, port_src, port_dst)
+            
             # Update flow stats
             stats = self.flow_stats[flow_key]
             stats["packet_count"] += 1

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Adapted from: How to Build a Real-Time Intrusion Detection System with Python and Open-Source Libraries -> https://www.freecodecamp.org/news/build-a-real-time-intrusion-detection-system-with-python/
+import queue
 from packet_capture import PacketCapture, TrafficAnalyser
 from detection_engine import DetectionEngine
 from alert_system import AlertSystem

@@ -31,6 +31,7 @@ class DetectionEngine:
 
     def detect_threats(self, features):
         threats = []
+
         # Signature based detection
         for rule_name, rule in self.signature_rules.items():
             if rule["condition"](features):
@@ -39,11 +40,12 @@ class DetectionEngine:
                     "rule": rule_name,
                     "confidence": 1.0,
                 })
+
         # Anomaly detection
         feature_vector = np.array([[
             features["packet_size"],
             features["packet_rate"],
-            features["byte_rate"],
+            features["byte_rate"]
         ]])
         anomaly_score = self.anomaly_detector.score_samples(feature_vector)[0]
         if anomaly_score < -0.5:

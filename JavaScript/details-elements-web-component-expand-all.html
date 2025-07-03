@@ -57,22 +57,22 @@
 	<!-- Details elements -->
 	<details-wrapper class="web-component details-wrapper">
 		<!-- 1st details element -->
-		<details class="details">
+		<details class="details" name="details-combo">
 			<summary class="summary details__summary">APIs</summary>
 			<p class="details__text">Section 1: Peekaboo! Here's some content on APIs!</p>
 		</details>
 		<!-- 2nd details element -->
-		<details class="details">
+		<details class="details" name="details-combo">
 			<summary class="summary details__summary">Authentication</summary>
 			<p class="details__text">Section 2: Peekaboo! Here's some content on authentication!</p>
 		</details>
 		<!-- 3rd details element -->
-		<details class="details">
+		<details class="details" name="details-combo">
 			<summary class="summary details__summary">Promises</summary>
 			<p class="details__text">Section 3: Peekaboo! Here's some content on promises!</p>
 		</details>
 		<!-- 4th details element -->
-		<details class="details">
+		<details class="details" name="details-combo">
 			<summary class="summary details__summary">Security</summary>
 			<p class="details__text">Section 4: Peekaboo! Here's some content on security!</p>
 		</details>
@@ -80,7 +80,7 @@
 
 	<!-- JavaScript Here -->
 	<script>
-		customElements.define('details-expand', class extends HTMLElement {
+		customElements.define('xdetails-expand', class extends HTMLElement {
 			/**
 			 * Instantiate the web component
 			*/

@@ -8,6 +8,7 @@
 </head>
 <body>
 	<a href="/terms" class="anchor">Read the Terms of Services</a>
+
 	<!-- JavaScript Here -->
 	<script>
 		// Convert link to button
@@ -18,8 +19,9 @@
 		fetch('/about').then(function (response) {
 			if (response.ok) {
 				return response.text();
+			} else {
+				throw response;
 			}
-			throw response;
 		}).then(function (text) {
 			console.log(text);
 			let dialog = document.querySelectorAll('dialog')[0];
@@ -35,8 +37,9 @@
 		fetch('/about').then(function (response) {
 			if (response.ok) {
 				return response.text();
+			}else {
+				throw response;
 			}
-			throw response;
 		}).then(function (text) {
 			let html = stringToHtml(text);
 			let content = html.querySelectorAll('#agreement')[0];

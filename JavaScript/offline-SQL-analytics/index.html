@@ -1,0 +1,253 @@
+<!-- Adapted from Offline SQL Analytics: Complete Guide to Browser-Based Data Analysis -> https://www.lakeclient.com/offline-sql-analytics-complete-guide -->
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Offline SQL Analytics</title>
+	<style>
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+			font: inherit;
+		}
+
+		.body {
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+			/* width: 100%; */
+			margin: 1.25rem;
+			line-height: 1.6;
+		}
+
+		.query-interface {
+			margin: 1.25rem 0;
+		}
+
+		.sql-query {
+			width: 100%;
+			max-width: 50rem;
+			padding: 0.625rem;
+			font-family: "Courier New", monospace;
+			font-size: 0.875rem;
+			border: 0.0625rem solid #DDDDDD;
+			border-radius: 0.25rem;
+		}
+
+		.button {
+			padding: 0.625rem 1.25rem;
+			font-size: 0.875rem;
+			border: none;
+			border-radius: 0.25rem;
+			cursor: pointer;
+			background-color: #4CAF50;
+			color: white;
+		}
+
+		.button:hover {
+			background-color: #45A049;
+		}
+
+		.button:disabled {
+			background-color: #CCCCCC;
+			cursor: not-allowed;
+		}
+
+		.results {
+			margin-top: 1.25rem;
+		}
+
+		.table {
+			font-size: 0.75rem;
+		}
+
+		.offline-indicator {
+			position: fixed;
+			top: 0.625rem;
+			right: 0.625rem;
+			padding: 0.3125rem 0.625rem;
+			background-color: #FF9800;
+			color: white;
+			border-radius: 0.25rem;
+			font-size: 0.75rem;
+		}
+
+		.online-indicator {
+			background-color: #4CAF50;
+		}
+	</style>
+</head>
+<body class="body">
+	<h1 class="h1">Offline SQL Analytics Platform</h1>
+
+	<section class="section file-input" id="file_input">
+		<input type="file" name="" class="input data-files" id="data_files" multiple accept=".csv, .parquet, .json" placeholder="Supported file types: .csv, .parquet, .json">
+		<button class="button load-file-btn" onclick="loadFiles()">Load Data Files</button>
+	</section>
+
+	<section class="section query-interface" id="query_interface">
+		<textarea name="sql_query" id="sql_query" class="textarea sql-query" placeholder="Write your SQL query here">
+			SELECT * FROM data LIMIT 7;
+		</textarea>
+		<br>
+		<button class="button execute-query-btn" id="execute_btn" onclick="executeQuery()">Execute Query</button>
+		<button class="button clear-results-btn" id="clear_results_btn" onclick="clearResults()">Clear Results</button>
+	</section>
+
+	<section class="section results-interface" id="results_interface">
+		<div class="results" id="results">
+			<!-- Query results will appear here -->
+		</div>
+	</section>
+</body>
+
+<!-- JavaScript Here -->
+<script type="module">
+	import * as duckdb from 'https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@latest/+esm';
+	// import * as duckdb from 'https://unpkg.com/@duckdb/duckdb-wasm@latest/dist/duckdb-browser.js';
+	// import * as duckdb from '@duckdb/duckdb-wasm';
+	let db;
+	let conn;
+	let loadedFiles = new Set();
+
+	// Initialise DuckDB for offline use
+	async function initialiseOfflineDB() {
+		try {
+			console.log('Initialising offline database...');
+
+			const JSDELIVR_BUNDLES = duckdb.getJsDelivrBundles();
+			const bundle = await duckdb.selectBundle(JSDELIVR_BUNDLES);
+
+			// Create worker for background processing
+			const worker = await duckdb.createWorker(bundle.mainWorker);
+			const logger = new duckdb.ConsoleLogger();
+
+			// Initialise database
+			db = new duckdb.AsyncDuckDB(logger, worker);
+			await db.instantiate(bundle.mainModule);
+			conn = await db.connect();
+
+			console.log('Offline DuckDB initialised successfully');
+			updateStatus('Ready for offline analysis');
+		} catch (err) {
+			console.error('Failed to initialise DuckDB:', err);
+			updateStatus(`Initialisation failed: ${err.message}`);
+		}
+	}
+
+	// Load files for offline processing
+	window.loadedFiles = async function() {
+		const fileInput = document.getElementById('data_files');
+		const files = Array.from(fileInput.files);
+
+		if (files.length === 0) {
+			alert('Please select at least one file.');
+			return;
+		}
+
+		updateStatus('Loading files...');
+
+		for (const file of files) {
+			try {
+				await loadSingleFile(file);
+				loadedFiles.add(file.name);
+			} catch (err) {
+				console.error(`Failed to load file ${file.name}:`, err);
+				alert(`Failed to load ${file.name}: ${err.message}`);
+			}
+		}
+
+		updateStatus(`Loaded ${files.length} file(s) - Ready for analysis`);
+		updateFileList();
+	};
+
+	// Load individual file based on type
+	async function loadSingleFile(file) {
+		const fileName = file.name;
+		const extension = fileName.split('.').pop().toLowerCase();
+
+		switch (extension) {
+			case 'csv':
+				const csvText = await file.text();
+				await db.registerFileText(fileName, csvText);
+				break;
+
+			case 'parquet':
+				const parquetBuffer = await file.arrayBuffer();
+				await db.registerFileBuffer(fileName, new Uint8Array(parquetBuffer));
+				break;
+
+			case 'json':
+				const jsonText = await file.text();
+				await db.registerFileText(fileName, jsonText);
+				break;
+
+			default:
+				throw new Error(`Unsupported file type: ${extension}`);
+		}
+
+		console.log(`Loaded ${fileName} for offline analysis`);
+	}
+
+	// Execute SQL query offline
+	window.executeQuery = async function() {
+		const sqlQuery = document.getElementById('sql_query').value.trim();
+		const executeBtn = document.getElementById('execute_btn');
+		const resultsDiv = document.getElementById('results');
+
+		if (!sqlQuery) {
+			alert('Please enter a valid SQL query.');
+			return;
+		}
+
+		if (!conn) {
+			alert('Database not initialised. Please refresh and try again.');
+			return;
+		}
+
+		try {
+			executeBtn.disabled = true;
+			executeBtn.textContent = 'Executing...';
+			updateStatus('Executing query...');
+
+			const startTime = performance.now();
+			const result = await conn.query(sqlQuery);
+			const endTime = performance.now();
+
+			const data = result.toArray();
+			const executionTime = Math.round(endTime - startTime);
+
+			displayResults(data, executionTime);
+			updateStatus(`Query executed successfully in ${executionTime}ms - ${data.length} rows returned`);
+		} catch (err) {
+			console.error('Failed to execute query:', err);
+			resultsDiv.insertAdjacentHTML('beforeend', `<div style="color: red; padding: 10px; border: 1px solid red; margin: 10px 0;"><strong>Query Error:</strong> ${err.message}</div>`);
+			updateStatus(`Query execution failed: ${err.message}`);
+		} finally {
+			executeBtn.disabled = false;
+			executeBtn.textContent = 'Execute Query';
+		}
+	};
+
+	// Display query results
+	function displayResults(data, executionTime) {}
+
+	// Clear results display
+	window.clearResults = function() {};
+
+	// Update status display
+	function updateStatus(message) {}
+
+	// Update loaded files list
+	function updateFileList() {}
+
+	// Initialise when page loads
+	document.addEventListener('DOMContentLoaded', async function() {
+		initialiseOfflineDB();
+		updateFileList();
+	});
+
+	// Make functions globally available for HTML onclick
+	window.initialiseOfflineDB = initialiseOfflineDB;
+</script>
+</html>
